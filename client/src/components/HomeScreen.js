@@ -2,12 +2,23 @@ import React, { useContext, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
+import YoutubePlayer from 'react-youtube-player';
 
+// IMPORT OUR MUI COMPONENTS
 import AddIcon from '@mui/icons-material/Add';
 import Fab from '@mui/material/Fab'
 import List from '@mui/material/List';
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
+
 
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
@@ -51,34 +62,68 @@ const HomeScreen = () => {
 
     console.log(store.idNamePairs)
     return (
-        <>
-            <div id="playlist-selector">
-                <div id="playlist-selector-heading">
-                    <Fab 
-                        color="primary" 
-                        aria-label="add"
-                        id="add-list-button"
-                        size = "medium"
-                        onClick={handleCreateNewList}
-                        sx={style}
-                        disabled={disableBtns}
-                    >
-                        <AddIcon />
-                    </Fab>
-                    <Typography 
-                    variant = "h3"
-                    sx = {{color : 'black', size: "32px"}}
-                    >
-                        Your Lists
-                    </Typography>
+        <> 
+            <Grid container 
+                spacing={2}
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+            >
+                <Grid item>Hello</Grid>
+                <Grid item>
+                    <Grid container direction = "column">
+                        <Grid item>
+                            <Button variant="contained" >Player</Button>
+                            <Button variant="contained" >Comments</Button>
+                        </Grid>
+                        <Grid item>
+                            <YoutubePlayer></YoutubePlayer>
+                            <Typography align='center'> Now Playing</Typography>
+                            <Typography align='left'> Song #</Typography>
+                            <Typography align='left'> Title: </Typography>
+                            <Typography align='left'> Artist: </Typography>
+                            <Stack direction = "row" spacing={2} justifyContent="center" alignItems="center">
+                                <IconButton aria-label="delete">
+                                    <FastRewindIcon/>
+                                </IconButton>
+                                <IconButton aria-label="delete">
+                                    <PlayArrowIcon />
+                                </IconButton>
+                                <IconButton aria-label="delete">
+                                    <PauseIcon />
+                                </IconButton>
+                                <IconButton aria-label="delete">
+                                    <FastForwardIcon />
+                                </IconButton>
+                            </Stack>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
+            <Box id="playlister-statusbar">
+                <IconButton 
+                    aria-label="add-list" 
+                    size = "large"  
+                    sx={{ 
+                    color: "white", 
+                    backgroundColor: "black", 
+                    borderRadius: "50%" 
+                    }
+                }>
+                    <AddIcon></AddIcon>
+                </IconButton>
+                <Typography variant="h4">Your Lists</Typography>
+            </Box>
+            {/* <div>
+                <div id="list-selector-list">
+                    {
+                        listCard
+                    }
+                </div>
+                <div id="youtube-player">
                 </div>
             </div>
-            <div id="list-selector-list">
-                {
-                    listCard
-                }
-            </div>
-            <MUIDeleteModal></MUIDeleteModal>
+            <MUIDeleteModal></MUIDeleteModal> */}
         </>
         )
 }
