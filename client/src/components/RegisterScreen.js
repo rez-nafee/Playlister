@@ -30,7 +30,11 @@ export default function RegisterScreen() {
     };
 
     return (
-            <Container component="main" maxWidth="xs">
+            <Container component="main" sx={{
+                width: "100vw",
+                height: "90vh",
+                backgroundColor: 'white'
+            }}>
                 <CssBaseline />
                 <Box
                     sx={{
@@ -38,7 +42,8 @@ export default function RegisterScreen() {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        height: '70%'
+                        height: "90vh",
+                        backgroundColor: 'white'
                     }}
                 >
                     <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
