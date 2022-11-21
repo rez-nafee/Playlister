@@ -96,8 +96,8 @@ function ListCard(props) {
             id={idNamePair._id}
             className = {'list-box list-card ' + selectClass + " "}
             key={idNamePair._id}
-            sx={{ marginTop: '15px', display: 'flex', p: 1 }}
-            style={{ width: '100%', fontSize: '32pt' }}
+            sx={{display: 'flex', p: 1 }}
+            style={{fontSize: '32pt' }}
         >
             <Box 
             sx={{ p: 1, flexGrow: 1 }}
@@ -107,16 +107,6 @@ function ListCard(props) {
             }}
             >   
                 {idNamePair.name}
-            </Box>
-            <Box sx={{ p: 1 }} className = "card-buttons">
-                <IconButton onClick={handleToggleEdit} aria-label='edit' disabled={disableBtns}>
-                    <EditIcon style={{fontSize:'48pt'}} className='playlister-button' sx={style}/>
-                </IconButton>
-                <IconButton onClick={(event) => {
-                        handleDeleteList(event, idNamePair._id)
-                    }} aria-label='delete' disabled={disableBtns} sx={{}}>
-                    <DeleteIcon style={{fontSize:'48pt'}} className='playlister-button' sx={style}/>
-                </IconButton>
             </Box>
         </Box>
 

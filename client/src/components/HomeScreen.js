@@ -64,13 +64,31 @@ const HomeScreen = () => {
     return (
         <> 
             <Grid container 
-                spacing={2}
+                spacing={1}
                 direction="row"
                 justifyContent="space-around"
                 alignItems="center"
             >
-                <Grid item>Hello</Grid>
-                <Grid item>
+                <Grid item
+                    sx = {{
+                        width: '50vw',
+                        height: '75vh'
+                    }}
+                >  
+                <Box sx={{
+                    backgroundColor: "black",
+                }}>
+                    {
+                        listCard
+                    }
+                </Box>
+                </Grid>
+                <Grid item
+                    sx = {{
+                        width: '50vw',
+                        height: '75vh'
+                    }}
+                >
                     <Grid container direction = "column">
                         <Grid item>
                             <Button variant="contained" >Player</Button>
