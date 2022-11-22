@@ -4,6 +4,7 @@ import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store'
 
 import EditToolbar from './EditToolbar'
+import FunctionBar from './FunctionBar';
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
@@ -94,36 +95,40 @@ export default function AppBanner() {
     }
 
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" style={{ background: '#A8A8A8'}}>
-                <Toolbar>
-                    <Typography                        
-                        variant="h4"
-                        noWrap
-                        component="div"
-                        sx={{ display: { xs: 'none', sm: 'block' } }}                        
-                    >
-                        <Link style={{textDecoration: 'none', color: 'red', fontFamily: "Pacifico", fontSize: '16pt'}} to='/'>Playlister</Link>
-                    </Typography>
-                    <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <IconButton
-                            size="large"
-                            edge="end"
-                            aria-label="account of current user"
-                            aria-controls={menuId}
-                            aria-haspopup="true"
-                            onClick={handleProfileMenuOpen}
-                            color="inherit"
+        <>
+            <Box sx={{ flexGrow: 1 }}>
+                <AppBar position="static" style={{ background: '#A8A8A8'}}>
+                    <Toolbar>
+                        <Typography                        
+                            variant="h4"
+                            noWrap
+                            component="div"
+                            sx={{ display: { xs: 'none', sm: 'block' } }}                        
                         >
-                            { getAccountMenu(auth.loggedIn) }
-                        </IconButton>
-                    </Box>
-                </Toolbar>
-            </AppBar>
-            {
-                menu
-            }
-        </Box>
+                            <Link style={{textDecoration: 'none', color: 'red', fontFamily: "Pacifico", fontSize: '16pt'}} to='/'>Playlister</Link>
+                        </Typography>
+                        <Box sx={{ flexGrow: 1 }}>{editToolbar}</Box>
+                        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                            <IconButton
+                                size="large"
+                                edge="end"
+                                aria-label="account of current user"
+                                aria-controls={menuId}
+                                aria-haspopup="true"
+                                onClick={handleProfileMenuOpen}
+                                color="inherit"
+                            >
+                                {getAccountMenu(auth.loggedIn)}
+                            </IconButton>
+                        </Box>
+                    </Toolbar>
+                </AppBar>
+                {
+                    menu
+                }
+            </Box>
+            { auth.loggedIn ? <FunctionBar></FunctionBar> : <></>}
+        </>
+
     );
 }

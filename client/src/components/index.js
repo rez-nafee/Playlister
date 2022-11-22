@@ -13,6 +13,7 @@ import SplashScreen from './SplashScreen'
 import Statusbar from './Statusbar'
 import WorkspaceScreen from './WorkspaceScreen'
 import MUIAccountError from './MUIAccountError'
+import FunctionBar from "./FunctionBar"
 
 /*
     This serves as a module so that we can import
@@ -36,5 +37,6 @@ export {
     SplashScreen,
     Statusbar, 
     WorkspaceScreen,
-    MUIAccountError
+    MUIAccountError,
+    FunctionBar
  }

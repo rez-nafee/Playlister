@@ -3,6 +3,7 @@ import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import YoutubePlayer from 'react-youtube-player';
+import FunctionBar from './FunctionBar';
 
 // IMPORT OUR MUI COMPONENTS
 import AddIcon from '@mui/icons-material/Add';
@@ -132,16 +133,6 @@ const HomeScreen = () => {
                 </IconButton>
                 <Typography variant="h4">Your Lists</Typography>
             </Box>
-            {/* <div>
-                <div id="list-selector-list">
-                    {
-                        listCard
-                    }
-                </div>
-                <div id="youtube-player">
-                </div>
-            </div>
-            <MUIDeleteModal></MUIDeleteModal> */}
         </>
         )
 }
