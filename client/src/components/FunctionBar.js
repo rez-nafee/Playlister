@@ -83,7 +83,7 @@ export default function FunctionBar(){
                         </PeopleIcon>
                     </IconButton>
                 </Stack>
-                <TextField id="filled-basic" variant="filled" sx={{ flexGrow: 0.5 }}/>
+                <TextField id="filled-basic" variant="filled" sx={{ flexGrow: 0.5 }} label="Search Playlists"/>
                 <IconButton>
                     <SortIcon
                          onClick={handleProfileMenuOpen}
