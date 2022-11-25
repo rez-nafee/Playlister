@@ -73,21 +73,18 @@ const HomeScreen = () => {
                 <Grid item
                     sx = {{
                         width: '50vw',
-                        height: '75vh'
+                        height: '70vh',
+                        overflow: 'scroll' 
                     }}
                 >  
-                <Box sx={{
-                    backgroundColor: "black",
-                }}>
                     {
                         listCard
                     }
-                </Box>
                 </Grid>
                 <Grid item
                     sx = {{
                         width: '50vw',
-                        height: '75vh'
+                        height: '70vh'
                     }}
                 >
                     <Grid container direction = "column">

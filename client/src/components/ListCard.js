@@ -96,7 +96,11 @@ function ListCard(props) {
             id={idNamePair._id}
             className = {'list-box list-card ' + selectClass + " "}
             key={idNamePair._id}
-            sx={{display: 'flex', p: 1 }}
+            sx={{
+                display: 'flex', 
+                p: 1,
+                height: '20vh'
+            }}
             style={{fontSize: '32pt' }}
         >
             <Box 
