@@ -193,9 +193,9 @@ function ListCard(props) {
             expanded = {expanded === idNamePair._id}
             sx = {{
                 mb : 2,
-                pointerEvents: "none"
+                pointerEvents: "none",
             }}
-            onChange = {() => expanded === idNamePair._id ? handleExpand(null) : null }
+            onChange = {() => expanded === idNamePair._id ? handleExpand(null) : null}
         >
             <AccordionSummary
                 id={idNamePair._id}
@@ -268,9 +268,10 @@ function ListCard(props) {
                 </Grid>
             </AccordionSummary>
             <AccordionDetails
-                sx = {{
-                    height: '50vh',
-                    overflow: "scroll"
+                 sx = {{
+                    height: '45vh',
+                    overflow: "scroll",
+                    pointerEvents: "auto"
                 }}
             >
                 {
@@ -282,7 +283,7 @@ function ListCard(props) {
                             song={song}
                         />
                     ))  
-                }
+                } 
             </AccordionDetails>
         </Accordion>
     
