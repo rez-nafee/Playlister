@@ -1,12 +1,23 @@
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
+
+//IMPORT OUR MATERIAL UI COMPONENTS
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography'
+import Button from '@mui/material/Button'
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 
+//IMPORT OUR BUTTONS
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
 /*
     This is a card in our list of top 5 lists. It lets select
     a list for editing and it has controls for changing its 
@@ -98,20 +109,67 @@ function ListCard(props) {
             key={idNamePair._id}
             sx={{
                 display: 'flex', 
-                p: 1,
-                height: '20vh'
+                p: 3,
+                height: '15vh'
             }}
             style={{fontSize: '32pt' }}
         >
-            <Box 
-            sx={{ p: 1, flexGrow: 1 }}
-            id={"list-card-text-" + idNamePair._id}
-            onClick={(event) => {
-                handleLoadList(event, idNamePair._id)
-            }}
-            >   
-                {idNamePair.name}
-            </Box>
+            <Grid container
+                 direction="row"
+                 justifyContent="space-between"
+                 alignItems="center"
+            >
+                <Grid item>
+                    <Stack>
+                        <Typography fontSize={'28pt'} >{idNamePair.name}</Typography>
+                        <Typography fontSize={'10pt'} >By: </Typography>
+                        <Typography fontSize={'10pt'}>Published: </Typography>
+                    </Stack>
+                </Grid>
+                <Grid item>
+                    <Grid container
+                        direction = 'column'
+                    >
+                        <Grid item>
+                            <Stack  
+                            direction="row"
+                            spacing = {3}>
+                                <Box>
+                                    <IconButton>
+                                        <ThumbUpIcon>
+                                        </ThumbUpIcon>
+                                        <Typography>2</Typography>
+                                    </IconButton>
+                                </Box>
+                                <Box>
+                                    <IconButton>
+                                        <ThumbDownIcon>
+                                        </ThumbDownIcon>
+                                        <Typography>2</Typography>
+                                    </IconButton>
+                                </Box>
+                            </Stack>
+                        </Grid>
+                        <Grid item align = 'right'>
+                            <Grid container
+                                direction = 'row'
+                                justifyContent="space-between"
+                                alignItems="center"
+                            >
+                                <Grid item>
+                                    <Typography fontSize={'10pt'}>Listens:</Typography>
+                                </Grid>
+                                <Grid item align = 'right'>
+                                    <IconButton>
+                                        <KeyboardDoubleArrowDownIcon>
+                                        </KeyboardDoubleArrowDownIcon>
+                                    </IconButton>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Grid>
         </Box>
 
     if (editActive) {
