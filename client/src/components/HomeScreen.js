@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
@@ -24,6 +24,15 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
 
+    const [expanded, setExpanded] = useState(null);
+
+    const handleChange = (id) => {
+        console.log("change state!")
+        console.log("Accordion with ID of: ", id)
+        //CLEAR THE TRANSACTION STACK HERE TOO!
+        setExpanded(id);
+    };
+  
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
@@ -39,6 +48,8 @@ const HomeScreen = () => {
                 (
                     <ListCard
                         key={pair._id}
+                        expanded = {expanded}
+                        handleExpand = {handleChange}
                         idNamePair={pair}
                         selected={false}
                     />
@@ -61,7 +72,7 @@ const HomeScreen = () => {
         }
     }
 
-    console.log(store.idNamePairs)
+    console.log("Open accordion?", expanded)
     return (
         <> 
             <Grid container 

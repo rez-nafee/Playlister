@@ -1,6 +1,8 @@
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 
+import SongCard from './SongCard.js'
+
 //IMPORT OUR MATERIAL UI COMPONENTS
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -12,6 +14,8 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
+import {Accordion, AccordionSummary, AccordionDetails, getNativeSelectUtilityClasses} from '@mui/material/'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 //IMPORT OUR BUTTONS
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -28,8 +32,10 @@ import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
-    const [text, setText] = useState("");
-    const { idNamePair, selected } = props;
+    const [text, setText] = useState('');
+
+
+    const { idNamePair, selected, expanded, handleExpand } = props;
 
     function handleLoadList(event, id) {
         console.log("handleLoadList for " + id);
@@ -91,9 +97,7 @@ function ListCard(props) {
     if (store.listNameActive || store.currentModal === 'DELETE_LIST'){
         disableBtns = true
     }
-
-    console.log(disableBtns)
-    
+ 
     let style = {}
     if(disableBtns){
         style = {
@@ -102,75 +106,187 @@ function ListCard(props) {
         }
     }
 
-    let cardElement =
-        <Box
-            id={idNamePair._id}
-            className = {'list-box list-card ' + selectClass + " "}
-            key={idNamePair._id}
-            sx={{
-                display: 'flex', 
-                p: 3,
-                height: '15vh'
+    // let cardElement =
+    //     <Box
+    //         id={idNamePair._id}
+    //         className = {'list-box list-card ' + selectClass + " "}
+    //         key={idNamePair._id}
+    //         sx={{
+    //             display: 'flex', 
+    //             p: 1,
+    //             height: '30vh'
+    //         }}
+    //         style={{fontSize: '32pt' }}
+    //     >
+            // <Grid container
+            //      direction="row"
+            //      justifyContent="space-between"
+            //      alignItems="center"
+            // >
+            //     <Grid item>
+            //         <Stack>
+            //             <Typography fontSize={'28pt'} >{idNamePair.name}</Typography>
+            //             <Typography fontSize={'10pt'} >By: </Typography>
+            //             <Typography fontSize={'10pt'}>Published: </Typography>
+            //         </Stack>
+            //     </Grid>
+            //     <Grid item>
+            //         <Grid container
+            //             direction = 'column'
+            //         >
+            //             <Grid item>
+            //                 <Stack  
+            //                 direction="row"
+            //                 spacing = {3}>
+            //                     <Box>
+            //                         <IconButton>
+            //                             <ThumbUpIcon>
+            //                             </ThumbUpIcon>
+            //                             <Typography>2</Typography>
+            //                         </IconButton>
+            //                     </Box>
+            //                     <Box>
+            //                         <IconButton>
+            //                             <ThumbDownIcon>
+            //                             </ThumbDownIcon>
+            //                             <Typography>2</Typography>
+            //                         </IconButton>
+            //                     </Box>
+            //                 </Stack>
+            //             </Grid>
+            //             <Grid item align = 'right'>
+            //                 <Grid container
+            //                     direction = 'row'
+            //                     justifyContent="space-between"
+            //                     alignItems="center"
+            //                 >
+            //                     <Grid item>
+            //                         <Typography fontSize={'10pt'}>Listens:</Typography>
+            //                     </Grid>
+            //                     <Grid item align = 'right'>
+            //                         <IconButton>
+            //                             <KeyboardDoubleArrowDownIcon>
+            //                             </KeyboardDoubleArrowDownIcon>
+            //                         </IconButton>
+            //                     </Grid>
+            //                 </Grid>
+            //             </Grid>
+            //         </Grid>
+            //     </Grid>
+            // </Grid>
+    //         <Box>
+            // {
+            //     idNamePair.playlist.songs.map((song, index) => (
+            //         <SongCard
+            //             id={'playlist-song-' + (index)}
+            //             key={'playlist-song-' + (index)}
+            //             index={index}
+            //             song={song}
+            //         />
+            //     ))  
+            // }
+    //         </Box>
+    //     </Box>
+
+    let cardElement = 
+        <Accordion
+            expanded = {expanded === idNamePair._id}
+            sx = {{
+                mb : 2,
+                pointerEvents: "none"
             }}
-            style={{fontSize: '32pt' }}
+            onChange = {() => expanded === idNamePair._id ? handleExpand(null) : null }
         >
-            <Grid container
-                 direction="row"
-                 justifyContent="space-between"
-                 alignItems="center"
+            <AccordionSummary
+                id={idNamePair._id}
+                className = {'list-box list-card ' + selectClass + " "}
+                key={idNamePair._id}
+                sx={{
+                    display: 'flex', 
+                    p: 5,
+                    height: '30vh',
+                }}
+                style={{fontSize: '32pt' }}
+                expandIcon = {
+                    <KeyboardDoubleArrowDownIcon
+                        sx={{
+                            pointerEvents: "auto"
+                        }}
+                        onClick = {() => handleExpand(idNamePair._id)}
+                    />
+                }
             >
-                <Grid item>
-                    <Stack>
-                        <Typography fontSize={'28pt'} >{idNamePair.name}</Typography>
-                        <Typography fontSize={'10pt'} >By: </Typography>
-                        <Typography fontSize={'10pt'}>Published: </Typography>
-                    </Stack>
-                </Grid>
-                <Grid item>
-                    <Grid container
-                        direction = 'column'
-                    >
-                        <Grid item>
-                            <Stack  
-                            direction="row"
-                            spacing = {3}>
-                                <Box>
-                                    <IconButton>
-                                        <ThumbUpIcon>
-                                        </ThumbUpIcon>
-                                        <Typography>2</Typography>
-                                    </IconButton>
-                                </Box>
-                                <Box>
-                                    <IconButton>
-                                        <ThumbDownIcon>
-                                        </ThumbDownIcon>
-                                        <Typography>2</Typography>
-                                    </IconButton>
-                                </Box>
-                            </Stack>
-                        </Grid>
-                        <Grid item align = 'right'>
                             <Grid container
-                                direction = 'row'
+                                direction="row"
                                 justifyContent="space-between"
                                 alignItems="center"
                             >
-                                <Grid item>
-                                    <Typography fontSize={'10pt'}>Listens:</Typography>
-                                </Grid>
-                                <Grid item align = 'right'>
-                                    <IconButton>
-                                        <KeyboardDoubleArrowDownIcon>
-                                        </KeyboardDoubleArrowDownIcon>
-                                    </IconButton>
+                            <Grid item>
+                                <Stack>
+                                    <Typography fontSize={'28pt'} >{idNamePair.name}</Typography>
+                                    <Typography fontSize={'10pt'} >By: </Typography>
+                                    <Typography fontSize={'10pt'}>Published: </Typography>
+                                </Stack>
+                            </Grid>
+                            <Grid item>
+                                <Grid container
+                                    direction = 'column'
+                                >
+                                    <Grid item>
+                                        <Stack  
+                                        direction="row"
+                                        spacing = {3}>
+                                            <Box>
+                                                <IconButton>
+                                                    <ThumbUpIcon>
+                                                    </ThumbUpIcon>
+                                                    <Typography>2</Typography>
+                                                </IconButton>
+                                            </Box>
+                                            <Box>
+                                                <IconButton>
+                                                    <ThumbDownIcon>
+                                                    </ThumbDownIcon>
+                                                    <Typography>2</Typography>
+                                                </IconButton>
+                                            </Box>
+                                        </Stack>
+                                    </Grid>
+                                    <Grid item align = 'right'>
+                                        <Grid container
+                                            direction = 'row'
+                                            justifyContent="space-between"
+                                            alignItems="center"
+                                        >
+                                            <Grid item>
+                                                <Typography fontSize={'10pt'}>Listens:</Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
                                 </Grid>
                             </Grid>
-                        </Grid>
-                    </Grid>
                 </Grid>
-            </Grid>
-        </Box>
+            </AccordionSummary>
+            <AccordionDetails
+                sx = {{
+                    height: '50vh',
+                    overflow: "scroll"
+                }}
+            >
+                {
+                    idNamePair.playlist.songs.map((song, index) => (
+                        <SongCard
+                            id={'playlist-song-' + (index)}
+                            key={'playlist-song-' + (index)}
+                            index={index}
+                            song={song}
+                        />
+                    ))  
+                }
+            </AccordionDetails>
+        </Accordion>
+    
+    
 
     if (editActive) {
         cardElement =
