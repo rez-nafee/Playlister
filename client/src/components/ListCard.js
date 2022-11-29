@@ -203,7 +203,7 @@ function ListCard(props) {
                 key={idNamePair._id}
                 sx={{
                     display: 'flex', 
-                    p: 5,
+                    p: 1,
                     height: '30vh',
                 }}
                 style={{fontSize: '32pt' }}
@@ -269,7 +269,7 @@ function ListCard(props) {
             </AccordionSummary>
             <AccordionDetails
                  sx = {{
-                    height: '45vh',
+                    height: '40vh',
                     overflow: "scroll",
                     pointerEvents: "auto"
                 }}
@@ -283,7 +283,47 @@ function ListCard(props) {
                             song={song}
                         />
                     ))  
-                } 
+                }
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    mb = {2}
+                >
+                    <Button
+                        sx = {{
+                            color : 'black',
+                            fontSize: 18
+                        }}
+                    >
+                        +
+                    </Button>
+                </Box>
+        
+                <Stack
+                    direction = 'row'
+                    alignItems= 'center'
+                    justifyContent= 'space-between'
+                >
+                    <Stack
+                        direction = 'row'
+                        alignItems= 'center'
+                        spacing = {1}
+                    >
+                        <Button variant = 'contained'> Undo</Button>
+                        <Button variant = 'contained'> Redo </Button>
+                    </Stack>
+
+                    <Stack
+                        direction = 'row'
+                        alignItems= 'center'
+                        spacing = {1}
+                    >
+                        <Button variant = 'contained'>Publish</Button>
+                        <Button variant = 'contained'>Delete</Button>
+                        <Button variant = 'contained'>Duplicate</Button>
+                    </Stack>
+                </Stack>
             </AccordionDetails>
         </Accordion>
     
