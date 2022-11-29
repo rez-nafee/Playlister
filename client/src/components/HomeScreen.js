@@ -38,6 +38,7 @@ const HomeScreen = () => {
     }, []);
 
     function handleCreateNewList() {
+        console.log("creating new playlist")
         store.createNewList();
     }
     let listCard = "";
@@ -72,7 +73,6 @@ const HomeScreen = () => {
         }
     }
 
-    console.log("Open accordion?", expanded)
     return (
         <> 
             <Grid container 
@@ -135,9 +135,11 @@ const HomeScreen = () => {
                     color: "white", 
                     backgroundColor: "black", 
                     borderRadius: "50%" 
-                    }
-                }>
-                    <AddIcon></AddIcon>
+                    }}
+                    onClick={() => handleCreateNewList()}
+                >
+                    <AddIcon>
+                    </AddIcon>
                 </IconButton>
                 <Typography variant="h4">Your Lists</Typography>
             </Box>

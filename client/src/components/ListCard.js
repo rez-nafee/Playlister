@@ -268,7 +268,8 @@ function ListCard(props) {
                 </Grid>
             </AccordionSummary>
             <AccordionDetails
-                 sx = {{
+                m = {0}
+                sx = {{
                     height: '40vh',
                     overflow: "scroll",
                     pointerEvents: "auto"
