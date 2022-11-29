@@ -5,6 +5,7 @@ const playlistSchema = new Schema(
     {
         name: { type: String, required: true},
         ownerEmail: { type: String, required: true },
+        author: {type: String, required: true},
         songs: { type: [{
             title: String,
             artist: String,
@@ -12,6 +13,7 @@ const playlistSchema = new Schema(
         }], required: true },
         likes: {type: Number, default: 0},
         dislikes: {type: Number, default: 0},
+        listens: {type: Number, default: 0},
         published: {type: Boolean, default: false},
         date: {type: String}
     },

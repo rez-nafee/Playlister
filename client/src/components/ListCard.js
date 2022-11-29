@@ -14,41 +14,31 @@ import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
-import {Accordion, AccordionSummary, AccordionDetails, getNativeSelectUtilityClasses} from '@mui/material/'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {Accordion, AccordionSummary, AccordionDetails} from '@mui/material/'
 
 //IMPORT OUR BUTTONS
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-import KeyboardDoubleArrowUpIcon from '@mui/icons-material/KeyboardDoubleArrowUp';
-/*
-    This is a card in our list of top 5 lists. It lets select
-    a list for editing and it has controls for changing its 
-    name or deleting it.
-    
-    @author McKilla Gorilla
-*/
+
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState('');
 
+    console.log(store.currentList)
+    console.log(store)
 
-    const { idNamePair, selected, expanded, handleExpand } = props;
+    const {idNamePair, selected} = props;
 
-    function handleLoadList(event, id) {
-        console.log("handleLoadList for " + id);
-        if (!event.target.disabled) {
-            let _id = event.target.id;
-            if (_id.indexOf('list-card-text-') >= 0)
-                _id = ("" + _id).substring("list-card-text-".length);
+    function handleLoadList() {
+        console.log('ID of List: ', idNamePair._id)
+        // CHANGE THE CURRENT LIST
+        store.setCurrentList(idNamePair._id);
+    }
 
-            console.log("load " + event.target.id);
-
-            // CHANGE THE CURRENT LIST
-            store.setCurrentList(id);
-        }
+    function handleClose() {
+        store.closeCurrentList();
     }
 
     function handleToggleEdit(event) {
@@ -64,9 +54,13 @@ function ListCard(props) {
         setEditActive(newActive);
     }
 
+    // Check if the currentList is selected
+    let currentListID = null
+    if (store.currentList){
+        currentListID = store.currentList._id
+    }
 
-    async function handleDeleteList(event, id) {
-        event.stopPropagation();
+    async function handleDeleteList() {
         console.log("List to be deleted: ", idNamePair._id)
         // Grab the lists id that is being marked for deletion by the user
         store.markListForDeletion(idNamePair._id);
@@ -188,14 +182,60 @@ function ListCard(props) {
     //         </Box>
     //     </Box>
 
+
+    // CHECK IF THE LIST HAS BEEN PUBLISHED BY THE USER OR NOT 
+    let publishedInfo = ''
+    let publishedStats = ''
+    let playlistListens = ''
+    if (!idNamePair.playlist.published){
+        console.log("PLAYLIST IS NOT PUBLISHED")
+        publishedInfo = 
+        <Stack>
+            <Typography fontSize={'28pt'} >{idNamePair.name}</Typography>
+            <Typography fontSize={'10pt'} display="inline">By: <Typography fontSize='10pt' sx={{color: 'blue'}} display="inline"> {idNamePair.playlist.author}</Typography></Typography>
+        </Stack>
+    }else {
+        console.log("PLAYLIST IS PUBLISHED!")
+        publishedInfo = 
+        <Stack>
+            <Typography fontSize={'28pt'} >{idNamePair.name}</Typography>
+            <Typography fontSize={'10pt'} display="inline">By: <Typography fontSize='10pt' sx={{color: 'blue'}} display="inline"> {idNamePair.playlist.author}</Typography></Typography>
+            <Typography fontSize={'10pt'} display='inline'>Published: <Typography fontSize='10pt' sx={{color: 'green'}} display="inline">{idNamePair.playlist.date}</Typography></Typography>
+        </Stack>
+        publishedStats =
+        <Stack  
+            direction="row"
+            spacing = {3}>
+            <Box>
+                <IconButton>
+                        <ThumbUpIcon>
+                        </ThumbUpIcon>
+                        <Typography>{idNamePair.playlist.likes}</Typography>
+                </IconButton>
+            </Box>
+            <Box>
+                <IconButton>
+                    <ThumbDownIcon>
+                    </ThumbDownIcon>
+                    <Typography>{idNamePair.playlist.dislikes}</Typography>
+                    </IconButton>
+            </Box>
+        </Stack>
+        playlistListens = 
+        <Typography fontSize={'10pt'} display='inline'>Listens: <Typography fontSize='10pt' sx={{color: 'red'}} display="inline">0</Typography></Typography>
+        
+    }
+    
+
+    console.log(store.currentList)
+
     let cardElement = 
         <Accordion
-            expanded = {expanded === idNamePair._id}
+            expanded = {idNamePair._id === currentListID}
             sx = {{
                 mb : 2,
                 pointerEvents: "none",
             }}
-            onChange = {() => expanded === idNamePair._id ? handleExpand(null) : null}
         >
             <AccordionSummary
                 id={idNamePair._id}
@@ -205,14 +245,16 @@ function ListCard(props) {
                     display: 'flex', 
                     p: 1,
                     height: '30vh',
+                    fontSize: '32pt',
+                    pointerEvents : 'auto'
                 }}
-                style={{fontSize: '32pt' }}
+                onDoubleClick = {handleToggleEdit}
                 expandIcon = {
                     <KeyboardDoubleArrowDownIcon
                         sx={{
                             pointerEvents: "auto"
                         }}
-                        onClick = {() => handleExpand(idNamePair._id)}
+                        onClick = {() => idNamePair._id === currentListID ? handleClose() : handleLoadList()}
                     />
                 }
             >
@@ -222,35 +264,18 @@ function ListCard(props) {
                                 alignItems="center"
                             >
                             <Grid item>
-                                <Stack>
-                                    <Typography fontSize={'28pt'} >{idNamePair.name}</Typography>
-                                    <Typography fontSize={'10pt'} >By: </Typography>
-                                    <Typography fontSize={'10pt'}>Published: </Typography>
-                                </Stack>
+                                {
+                                    publishedInfo
+                                }
                             </Grid>
                             <Grid item>
                                 <Grid container
                                     direction = 'column'
                                 >
                                     <Grid item>
-                                        <Stack  
-                                        direction="row"
-                                        spacing = {3}>
-                                            <Box>
-                                                <IconButton>
-                                                    <ThumbUpIcon>
-                                                    </ThumbUpIcon>
-                                                    <Typography>2</Typography>
-                                                </IconButton>
-                                            </Box>
-                                            <Box>
-                                                <IconButton>
-                                                    <ThumbDownIcon>
-                                                    </ThumbDownIcon>
-                                                    <Typography>2</Typography>
-                                                </IconButton>
-                                            </Box>
-                                        </Stack>
+                                        {
+                                            publishedStats
+                                        }
                                     </Grid>
                                     <Grid item align = 'right'>
                                         <Grid container
@@ -259,7 +284,9 @@ function ListCard(props) {
                                             alignItems="center"
                                         >
                                             <Grid item>
-                                                <Typography fontSize={'10pt'}>Listens:</Typography>
+                                                {
+                                                    playlistListens
+                                                }
                                             </Grid>
                                         </Grid>
                                     </Grid>
@@ -321,7 +348,7 @@ function ListCard(props) {
                         spacing = {1}
                     >
                         <Button variant = 'contained'>Publish</Button>
-                        <Button variant = 'contained'>Delete</Button>
+                        <Button variant = 'contained' onClick={() => handleDeleteList()}>Delete</Button>
                         <Button variant = 'contained'>Duplicate</Button>
                     </Stack>
                 </Stack>

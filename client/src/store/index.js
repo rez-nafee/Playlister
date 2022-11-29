@@ -64,7 +64,6 @@ function GlobalStoreContextProvider(props) {
 
     // SINCE WE'VE WRAPPED THE STORE IN THE AUTH CONTEXT WE CAN ACCESS THE USER HERE
     const { auth } = useContext(AuthContext);
-    console.log("auth: " + auth);
 
     // HERE'S THE DATA STORE'S REDUCER, IT MUST
     // HANDLE EVERY TYPE OF STATE CHANGE
@@ -117,10 +116,10 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.NONE,
                     idNamePairs: payload,
-                    currentList: null,
+                    currentList: store.currentList,
                     currentSongIndex: -1,
-                    currentSong: null,
-                    newListCounter: payload.length + 1,
+                    currentSong: store.currentSong,
+                    newListCounter: store.newListCounter++,
                     listNameActive: false,
                     listIdMarkedForDeletion: null,
                     listMarkedForDeletion: null
@@ -131,7 +130,7 @@ function GlobalStoreContextProvider(props) {
                 return setStore({
                     currentModal : CurrentModal.DELETE_LIST,
                     idNamePairs: store.idNamePairs,
-                    currentList: null,
+                    currentList: store.currentList,
                     currentSongIndex: -1,
                     currentSong: null,
                     newListCounter: store.newListCounter,
@@ -266,8 +265,8 @@ function GlobalStoreContextProvider(props) {
     // THIS FUNCTION CREATES A NEW LIST
     store.createNewList = async function () {
         let newListName = "Untitled Playlist"
-        console.log (newListName);
-        const response = await api.createPlaylist(newListName, [], auth.user.email);
+        let author = auth.user.firstName + " " + auth.user.lastName
+        const response = await api.createPlaylist(newListName, [], auth.user.email, author);
         console.log("createNewList response: " + response.data.playlist);
         if (response.status === 201) {
             tps.clearAllTransactions();
@@ -277,11 +276,13 @@ function GlobalStoreContextProvider(props) {
                 payload: newList
             }
             );
-            store.loadIdNamePairs();
+            //Update the current list
+            store.currentList = response.data.playlist
         }
         else {
             console.log("API FAILED TO CREATE A NEW LIST");
         }
+        store.loadIdNamePairs()
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
@@ -388,14 +389,14 @@ function GlobalStoreContextProvider(props) {
             let response = await api.getPlaylistById(id);
             if (response.data.success) {
                 let playlist = response.data.playlist;
-
+                console.log(playlist)
                 response = await api.updatePlaylistById(playlist._id, playlist);
                 if (response.data.success) {
+                    console.log('updating state...')
                     storeReducer({
                         type: GlobalStoreActionType.SET_CURRENT_LIST,
                         payload: playlist
                     });
-                    history.push("/playlist/" + playlist._id);
                 }
             }
         }

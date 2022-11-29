@@ -24,15 +24,6 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
 
-    const [expanded, setExpanded] = useState(null);
-
-    const handleChange = (id) => {
-        console.log("change state!")
-        console.log("Accordion with ID of: ", id)
-        //CLEAR THE TRANSACTION STACK HERE TOO!
-        setExpanded(id);
-    };
-  
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
@@ -49,8 +40,6 @@ const HomeScreen = () => {
                 (
                     <ListCard
                         key={pair._id}
-                        expanded = {expanded}
-                        handleExpand = {handleChange}
                         idNamePair={pair}
                         selected={false}
                     />
@@ -110,16 +99,16 @@ const HomeScreen = () => {
                             <Typography align='left'> Title: </Typography>
                             <Typography align='left'> Artist: </Typography>
                             <Stack direction = "row" spacing={2} justifyContent="center" alignItems="center">
-                                <IconButton aria-label="delete">
+                                <IconButton>
                                     <FastRewindIcon/>
                                 </IconButton>
-                                <IconButton aria-label="delete">
+                                <IconButton>
                                     <PlayArrowIcon />
                                 </IconButton>
-                                <IconButton aria-label="delete">
+                                <IconButton>
                                     <PauseIcon />
                                 </IconButton>
-                                <IconButton aria-label="delete">
+                                <IconButton>
                                     <FastForwardIcon />
                                 </IconButton>
                             </Stack>
@@ -143,6 +132,7 @@ const HomeScreen = () => {
                 </IconButton>
                 <Typography variant="h4">Your Lists</Typography>
             </Box>
+            <MUIDeleteModal></MUIDeleteModal>
         </>
         )
 }
