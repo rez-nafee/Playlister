@@ -27,6 +27,10 @@ export default function FunctionBar(){
     const isMenuOpen = Boolean(anchorEl);
     const { store } = useContext(GlobalStoreContext);
 
+    const[isHome, setIsHome] = useState(true)
+    const[isPeople, setIsPeople] = useState(false)
+    const[isUser, setIsUser] = useState(false)
+
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -57,8 +61,83 @@ export default function FunctionBar(){
             <MenuItem>Listens (High to Low)</MenuItem>
             <MenuItem>Likes (High to Low)</MenuItem>
             <MenuItem>Dislikes (High to Low)</MenuItem>
-        </Menu>   
+        </Menu> 
+        
+    let home = 'green'
+    let people = ''
+    let user = ''
 
+    let homeSelected = 'white'
+    let peopleSelected = ''
+    let userSelected = ''
+
+    if(isHome){
+        home = 'green'
+        people = ''
+        user = ''
+
+        homeSelected = 'white'
+        peopleSelected = ''
+        userSelected = ''
+    }
+
+    if(isPeople){
+        home = ''
+        people = 'green'
+        user = ''
+
+        homeSelected = ''
+        peopleSelected = 'white'
+        userSelected = ''
+    }
+
+    if(isUser){
+        home = ''
+        people = ''
+        user = 'green'
+
+        homeSelected = ''
+        peopleSelected = ''
+        userSelected = 'white'
+    }
+
+    console.log('[FUNCTION BAR] Home? ', isHome)
+    console.log('[FUNCTION BAR] People? ', isPeople)
+    console.log('[FUNCTION BAR] User? ', isUser)
+
+    console.log('[FUNCTION BAR] Home Color? ', home)
+    console.log('[FUNCTION BAR] People Color? ', people)
+    console.log('[FUNCTION BAR] User Color? ', user)
+
+    const handleHomeClick = () => {
+        console.log('[FUNCTION BAR] Home Button Clicked!')
+        setIsHome(true)
+        setIsPeople(false)
+        setIsUser(false)
+    }
+
+    const handlePeopleClick = () => {
+        console.log('[FUNCTION BAR] People Button Clicked!')
+        setIsHome(false)
+        setIsPeople(true)
+        setIsUser(false)
+    }
+
+    const handleUserClick = () => {
+        console.log('[FUNCTION BAR] User Button Clicked!')
+        setIsHome(false)
+        setIsPeople(false)
+        setIsUser(true)
+    }
+
+    let searchBar = 
+    <TextField id="filled-basic" variant="filled" sx={{ flexGrow: 0.5 }} label="Search Playlists by Name"/>
+
+    if(isUser){
+        searchBar =
+        <TextField id="filled-basic" variant="filled" sx={{ flexGrow: 0.5 }} label="Search Playlists by User"/>
+    }
+    
     return (
         <>
             <Stack 
@@ -70,20 +149,40 @@ export default function FunctionBar(){
                 }}
             >
                 <Stack direction= "row" spacing = {1}>
-                    <IconButton>
+                    <IconButton
+                        sx = {{
+                            backgroundColor: home,
+                            color: homeSelected
+                        }}
+                        onClick = {() => handleHomeClick()}
+                    >
                         <HomeIcon>
                         </HomeIcon>
                     </IconButton>
-                    <IconButton>
+                    <IconButton
+                        sx = {{
+                            backgroundColor: people,
+                            color: peopleSelected
+                        }}
+                        onClick = {() => handlePeopleClick()}
+                    >
                         <PeopleIcon>
                         </PeopleIcon>
                     </IconButton>
-                    <IconButton>
+                    <IconButton
+                        sx = {{
+                            backgroundColor: user,
+                            color: userSelected
+                        }}
+                        onClick = {() => handleUserClick()}
+                    >
                         <PersonIcon>
                         </PersonIcon>
                     </IconButton>
                 </Stack>
-                <TextField id="filled-basic" variant="filled" sx={{ flexGrow: 0.5 }} label="Search Playlists"/>
+                {
+                    searchBar
+                }
                 <IconButton>
                     <SortIcon
                          onClick={handleProfileMenuOpen}
