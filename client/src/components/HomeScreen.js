@@ -2,13 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
-import YoutubePlayer from 'react-youtube-player';
 import FunctionBar from './FunctionBar';
 
 // IMPORT OUR MUI COMPONENTS
 import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab'
-import List from '@mui/material/List';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import { TextField } from '@mui/material';
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
@@ -19,10 +19,12 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
+import ReactPlayer from 'react-player'
 
 
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const [value, setValue]= useState('player');
 
     useEffect(() => {
         store.loadIdNamePairs();
@@ -53,6 +55,84 @@ const HomeScreen = () => {
     }
 
     console.log(disableBtns)
+
+    let tabContent = ''
+    if (value === 'player'){
+        tabContent =
+        <Grid item>
+            <ReactPlayer 
+                url='https://www.youtube.com/watch?v=ysz5S6PUM-U'
+                width={'50vw'}
+                height={'42vh'}
+            />
+            <Box
+                sx={
+                    { 
+                        borderRadius: '1%',
+                        border: 2,
+                        borderColor: 'black'
+                    }
+                }
+                backgroundColor = 'white'  
+            >
+                <Typography align='center'> Now Playing</Typography>
+                <Typography align='left'> Song #</Typography>
+                <Typography align='left'> Title: </Typography>
+                <Typography align='left'> Artist: </Typography>
+                <Stack 
+                direction = "row"
+                justifyContent="center" 
+                alignItems="center" 
+            >
+                <Box
+                    sx={
+                        { 
+                            borderRadius: '25%',
+                            border: 2,
+                            borderColor: 'black'
+                        }
+                    }
+                    backgroundColor = 'beige'
+                >
+                    <IconButton size = 'large'>
+                        <FastRewindIcon/>
+                    </IconButton>
+                    <IconButton size = 'large'>
+                        <PlayArrowIcon />
+                    </IconButton>
+                    <IconButton size = 'large'>
+                        <PauseIcon />
+                    </IconButton>
+                    <IconButton size = 'large'>
+                        <FastForwardIcon />
+                    </IconButton>
+                </Box>
+            </Stack>
+            </Box>
+            
+        </Grid>
+    }
+    if (value === 'comments'){
+        tabContent = 
+        <Grid item>
+            <Box
+                backgroundColor = 'white'
+                sx={{
+                    width: '50vw',
+                    height: '55vh'
+                }}
+                overflow = 'scroll'
+            >
+            </Box> 
+            <TextField 
+                label="Write a comment..." 
+                variant="filled" 
+                sx={{
+                    width: '50vw',
+                }}
+            />
+        </Grid>
+    }
     
     let style = {}
     if(disableBtns){
@@ -73,7 +153,7 @@ const HomeScreen = () => {
                 <Grid item
                     sx = {{
                         width: '50vw',
-                        height: '70vh',
+                        height: '69vh',
                         overflow: 'scroll' 
                     }}
                 >  
@@ -89,30 +169,23 @@ const HomeScreen = () => {
                 >
                     <Grid container direction = "column">
                         <Grid item>
-                            <Button variant="contained" >Player</Button>
-                            <Button variant="contained" >Comments</Button>
+                            <Tabs
+                                value = {value}
+                                indicatorColor="secondary"
+                                sx = {{
+                                    backgroundColor: 'lightgrey',
+                                    height: '1vh'
+                                }}
+                                variant='fullWidth'
+                                onChange={(e, val) => setValue(val)}
+                            >
+                                <Tab value = 'player' label = 'Player'/>
+                                <Tab value = 'comments' label = 'Comments'/>
+                            </Tabs>
                         </Grid>
-                        <Grid item>
-                            <YoutubePlayer></YoutubePlayer>
-                            <Typography align='center'> Now Playing</Typography>
-                            <Typography align='left'> Song #</Typography>
-                            <Typography align='left'> Title: </Typography>
-                            <Typography align='left'> Artist: </Typography>
-                            <Stack direction = "row" spacing={2} justifyContent="center" alignItems="center">
-                                <IconButton>
-                                    <FastRewindIcon/>
-                                </IconButton>
-                                <IconButton>
-                                    <PlayArrowIcon />
-                                </IconButton>
-                                <IconButton>
-                                    <PauseIcon />
-                                </IconButton>
-                                <IconButton>
-                                    <FastForwardIcon />
-                                </IconButton>
-                            </Stack>
-                        </Grid>
+                        {
+                            tabContent
+                        }
                     </Grid>
                 </Grid>
             </Grid>

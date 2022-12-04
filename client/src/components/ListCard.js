@@ -261,7 +261,7 @@ function ListCard(props) {
                 sx={{
                     display: 'flex', 
                     p: 1,
-                    height: '30vh',
+                    height: '25vh',
                     fontSize: '32pt',
                     pointerEvents : 'auto'
                 }}
