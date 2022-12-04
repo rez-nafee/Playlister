@@ -283,6 +283,24 @@ function GlobalStoreContextProvider(props) {
         store.loadIdNamePairs()
     }
 
+    store.publishList = function (){
+        let list = store.currentList
+        console.log('[STORE] Before --> Publish Status? ', list.published)
+        // PUBLISH THE PLAYLIST BY SETTING THE PUBLISH FIELD --> TRUE 
+        list.published = true
+        console.log('[STORE] After --> Publish Status? ', list.published)
+        // NOW GRAB THE DATE WHEN THE USER HIT PUBLISHED 
+        var current = new Date();
+        var monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"];
+        var date = `${monthNames[current.getMonth()]} ${current.getDate()},${current.getFullYear()}`;
+        console.log("[STORE] Today's date is: ", date)
+        // SET THE DATE FIELD OF THE LIST 
+        list.date = date 
+        // UPDATE THE CURRENT LIST IN THE BACKEND
+        store.updateCurrentList();
+    }
+
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
     store.loadIdNamePairs = function () {
         async function asyncLoadIdNamePairs() {
@@ -349,6 +367,8 @@ function GlobalStoreContextProvider(props) {
         async function processDelete(id) {
             let response = await api.deletePlaylistById(id);
             if (response.data.success) {
+                //SET THE CURRENT LIST TO BE NULL!
+                store.currentList = null
                 store.loadIdNamePairs();
                 history.push("/");
             }

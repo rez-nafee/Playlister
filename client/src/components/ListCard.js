@@ -72,6 +72,11 @@ function ListCard(props) {
         store.markListForDeletion(idNamePair._id);
     }
 
+    function handlePublishList(){
+        console.log("[LISTCARD] Publishing Playlist: ", store.currentList._id)
+        store.publishList()
+    }
+
     function handleKeyPress(event) {
         if (event.code === "Enter") {
             let id = event.target.id.substring("list-".length);
@@ -136,26 +141,105 @@ function ListCard(props) {
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
-    
+
     // CHECK IF THE LIST HAS BEEN PUBLISHED BY THE USER OR NOT 
     let publishedInfo = ''
     let publishedStats = ''
     let playlistListens = ''
+    let playlistSongs = ''
+    let addSongs = ''
+    let controls = ''
     if (!idNamePair.playlist.published){
         console.log("PLAYLIST IS NOT PUBLISHED")
+
         publishedInfo = 
         <Stack>
             <Typography fontSize={'28pt'} >{idNamePair.name}</Typography>
             <Typography fontSize={'10pt'} display="inline">By: <Typography fontSize='10pt' sx={{color: 'blue'}} display="inline"> {idNamePair.playlist.author}</Typography></Typography>
         </Stack>
-    }else {
+
+        playlistSongs = 
+        <Box
+            p = {2}
+            sx = {{
+                backgroundColor: '#A9A9A9',
+                border: 2,
+                borderRadius: '2%',
+                height: '35vh',
+                overflow: 'scroll'
+            }}
+        >
+            {
+                idNamePair.playlist.songs.map((song, index) => (
+                    <SongCard
+                        id={'playlist-song-' + (index)}
+                        key={'playlist-song-' + (index)}
+                        index={index}
+                        song={song}
+                    />
+                ))
+            }
+        </Box>
+        
+        addSongs = 
+        <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            p = {1}
+        >
+            <Button
+                disabled = {!disableAdd}
+                className = 'list-card'
+                sx = {{
+                    fontSize: 16,
+                }}
+                variant = 'contained'
+                onClick={() => handleAddNewSong()}
+            >
+                +
+            </Button>
+        </Box>
+
+        controls = 
+        <Stack
+            direction = 'row'
+            alignItems= 'center'
+            justifyContent= 'space-between'
+            p= {1}
+        >
+            <Stack
+                direction = 'row'
+                alignItems= 'center'
+                spacing = {1}
+            >
+                <Button disabled = {!disableUndo} variant = 'contained' onClick={() => handleUndo()}> Undo</Button>
+                <Button disabled = {!disableRedo} variant = 'contained' onClick={() => handleRedo()} > Redo </Button>
+            </Stack>
+
+            <Stack
+                direction = 'row'
+                alignItems= 'center'
+                spacing = {1}
+            >
+                <Button disabled = {!disalbePublish} variant = 'contained' onClick={() => handlePublishList()}>Publish</Button>
+                <Button disabled = {!disableDelete} variant = 'contained' onClick={() => handleDeleteList()}>Delete</Button>
+                <Button disabled = {!disableDuplicate} variant = 'contained' onClick={() => handleDuplicate()}>Duplicate</Button>
+            </Stack>
+        </Stack>
+    }
+    else {
+        // PLAYLIST IS PUBLISHED
         console.log("PLAYLIST IS PUBLISHED!")
+        // SHOW THE PUBLISHED INFO --> NAME of the playlist, AUTHOR of the playlist, and DATE of when it was published
         publishedInfo = 
         <Stack>
             <Typography fontSize={'28pt'} >{idNamePair.name}</Typography>
             <Typography fontSize={'10pt'} display="inline">By: <Typography fontSize='10pt' sx={{color: 'blue'}} display="inline"> {idNamePair.playlist.author}</Typography></Typography>
             <Typography fontSize={'10pt'} display='inline'>Published: <Typography fontSize='10pt' sx={{color: 'green'}} display="inline">{idNamePair.playlist.date}</Typography></Typography>
         </Stack>
+
+        // SHOW THE STATS OF THE PLAYLIST --> # of LIKES & of DISLIKES
         publishedStats =
         <Stack  
             direction="row"
@@ -175,16 +259,70 @@ function ListCard(props) {
                     </IconButton>
             </Box>
         </Stack>
+
+        // SHOW THE # OF LISTENS FOR THE PLAYLIST
         playlistListens = 
         <Typography fontSize={'10pt'} display='inline'>Listens: <Typography fontSize='10pt' sx={{color: 'red'}} display="inline">0</Typography></Typography>
+    
+        // SHOW THE SONGS AS TYPOGRAPHY
+        playlistSongs = 
+        <Box
+            p = {2}
+            sx = {{
+                backgroundColor: 'beige',
+                border: 2,
+                borderRadius: '5%' 
+            }}
+            
+        >
+            {
+                idNamePair.playlist.songs.map((song, index) => (
+                    <Typography
+                        id={'playlist-song-' + (index)}
+                        fontSize='18pt'
+                        color = ''
+                    >
+                        {index + 1}. {song.title} by {song.artist}
+                    </Typography>
+                ))
+            }
+        </Box>  
+
+        addSongs = 
+        <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            mb = {2}
+        >
+        </Box>
+
+        controls = 
+        <Stack
+            direction = 'row'
+            alignItems= 'center'
+            justifyContent= 'flex-end'
+        >
+            <Stack
+                direction = 'row'
+                alignItems= 'center'
+                spacing = {2}
+            >
+                <Button disabled = {!disableDuplicate} variant = 'contained' onClick={() => handleDuplicate()}>Duplicate</Button>
+                <Button disabled = {!disableDelete} variant = 'contained' onClick={() => handleDeleteList()}>Delete</Button>
+            </Stack>
+        </Stack>
     }
-       
+    
+    console.log('[LISTCARD] Making card for: ', idNamePair)
+    let mouse = idNamePair.playlist.published ? 'none' : 'auto'
     let cardElement = 
         <Accordion
             expanded = {idNamePair._id === currentListID}
             sx = {{
                 mb : 2,
                 pointerEvents: "none",
+                border: 1,
             }}
         >
             <AccordionSummary
@@ -197,13 +335,14 @@ function ListCard(props) {
                     p: 1,
                     height: '25vh',
                     fontSize: '32pt',
-                    pointerEvents : 'auto'
+                    pointerEvents : mouse,
+                    border: 1,
                 }}
                 onDoubleClick = {handleToggleEdit}
                 expandIcon = {
                     <KeyboardDoubleArrowDownIcon
                         sx={{
-                            pointerEvents: "auto"
+                            pointerEvents: "auto",
                         }}
                         onClick = {() => idNamePair._id === currentListID ? handleClose() : handleLoadList()}
                     />
@@ -248,63 +387,19 @@ function ListCard(props) {
             <AccordionDetails
                 m = {0}
                 sx = {{
-                    height: '40vh',
                     overflow: "scroll",
                     pointerEvents: "auto"
                 }}
             >
                 {
-                    idNamePair.playlist.songs.map((song, index) => (
-                        <SongCard
-                            id={'playlist-song-' + (index)}
-                            key={'playlist-song-' + (index)}
-                            index={index}
-                            song={song}
-                        />
-                    ))  
+                    playlistSongs
                 }
-                <Box
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    mb = {2}
-                >
-                    <Button
-                        disabled = {!disableAdd}
-                        className = 'list-card'
-                        sx = {{
-                            fontSize: 16,
-                        }}
-                        variant = 'contained'
-                        onClick={() => handleAddNewSong()}
-                    >
-                        +
-                    </Button>
-                </Box>
-                <Stack
-                    direction = 'row'
-                    alignItems= 'center'
-                    justifyContent= 'space-between'
-                >
-                    <Stack
-                        direction = 'row'
-                        alignItems= 'center'
-                        spacing = {1}
-                    >
-                        <Button disabled = {!disableUndo} variant = 'contained' onClick={() => handleUndo()}> Undo</Button>
-                        <Button disabled = {!disableRedo} variant = 'contained' onClick={() => handleRedo()} > Redo </Button>
-                    </Stack>
-
-                    <Stack
-                        direction = 'row'
-                        alignItems= 'center'
-                        spacing = {1}
-                    >
-                        <Button disabled = {!disalbePublish} variant = 'contained'>Publish</Button>
-                        <Button disabled = {!disableDelete} variant = 'contained' onClick={() => handleDeleteList()}>Delete</Button>
-                        <Button disabled = {!disableDuplicate} variant = 'contained' onClick={() => handleDuplicate()}>Duplicate</Button>
-                    </Stack>
-                </Stack>
+                {
+                    addSongs
+                }
+                {
+                    controls
+                }
             </AccordionDetails>
         </Accordion>
     
