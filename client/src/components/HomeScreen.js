@@ -84,6 +84,7 @@ const HomeScreen = () => {
                 backgroundColor = 'white'  
             >
                 <Typography align='center'> Now Playing</Typography>
+                <Typography align='left'> Playlist</Typography>
                 <Typography align='left'> Song #</Typography>
                 <Typography align='left'> Title: </Typography>
                 <Typography align='left'> Artist: </Typography>

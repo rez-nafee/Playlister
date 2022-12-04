@@ -106,41 +106,37 @@ function ListCard(props) {
     let disableAdd = store.canAddNewSong()
     let disableUndo = store.canUndo()
     let disableRedo = store.canRedo()
+    let disalbePublish = true
+    let disableDuplicate = true 
+    let disableDelete = true 
    
-    if (store.currentModal === 'EDIT_SONG' || store.currentModal === 'REMOVE_SONG'){
+    if (store.isEditSongModalOpen() || store.isRemoveSongModalOpen() || store.isDeleteListModalOpen()){
+        console.log('[LIST CARD] MODAL IS OPEN --> DISABLED ALL BUTTONS!')
         disableAdd = false
         disableUndo = false
         disableRedo = false
+        disalbePublish = false
+        disableDuplicate = false
+        disableDelete = false
     }
 
     console.log('[LISTCARD] Add disabled?: ', disableAdd)
     console.log('[LISTCARD] Undo disabled?: ', disableUndo)
     console.log('[LISTCARD] Redo disabled?: ', disableRedo)
+    console.log('[LISTCARD] Publish disabled?: ', disalbePublish)
+    console.log('[LISTCARD] Duplicate disabled?: ', disableDuplicate)
 
 
     let selectClass = "unselected-list-card";
     if (selected) {
         selectClass = "selected-list-card";
     }
+
     let cardStatus = false;
     if (store.isListNameEditActive) {
         cardStatus = true;
     }
-
-    let disableBtns = false
-
-    if (store.listNameActive || store.currentModal === 'DELETE_LIST'){
-        disableBtns = true
-    }
- 
-    let style = {}
-    if(disableBtns){
-        style = {
-            bgcolor: 'grey',
-            cursor: 'not-allowed',
-        }
-    }
-
+    
     // CHECK IF THE LIST HAS BEEN PUBLISHED BY THE USER OR NOT 
     let publishedInfo = ''
     let publishedStats = ''
@@ -274,6 +270,7 @@ function ListCard(props) {
                     mb = {2}
                 >
                     <Button
+                        disabled = {!disableAdd}
                         className = 'list-card'
                         sx = {{
                             fontSize: 16,
@@ -303,9 +300,9 @@ function ListCard(props) {
                         alignItems= 'center'
                         spacing = {1}
                     >
-                        <Button variant = 'contained'>Publish</Button>
-                        <Button variant = 'contained' onClick={() => handleDeleteList()}>Delete</Button>
-                        <Button variant = 'contained' onClick={() => handleDuplicate()}>Duplicate</Button>
+                        <Button disabled = {!disalbePublish} variant = 'contained'>Publish</Button>
+                        <Button disabled = {!disableDelete} variant = 'contained' onClick={() => handleDeleteList()}>Delete</Button>
+                        <Button disabled = {!disableDuplicate} variant = 'contained' onClick={() => handleDuplicate()}>Duplicate</Button>
                     </Stack>
                 </Stack>
             </AccordionDetails>
