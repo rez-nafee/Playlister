@@ -25,9 +25,6 @@ function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const [editActive, setEditActive] = useState(false);
     const [text, setText] = useState('');
-
-    console.log(store.currentList)
-    console.log(store)
  
     const listCard = useRef(null);
 
@@ -87,10 +84,38 @@ function ListCard(props) {
         setText(event.target.value);
     }
 
-    //
+
     function handleDuplicate(){
         store.duplicatePlaylist()
     }
+
+    function handleAddNewSong() {
+        console.log("adding a new song...")
+        store.addNewSong();
+    }
+    function handleUndo() {
+        store.undo();
+    }
+    function handleRedo() {
+        store.redo();
+    }
+    function handleClose() {
+        store.closeCurrentList();
+    }
+
+    let disableAdd = store.canAddNewSong()
+    let disableUndo = store.canUndo()
+    let disableRedo = store.canRedo()
+   
+    if (store.currentModal === 'EDIT_SONG' || store.currentModal === 'REMOVE_SONG'){
+        disableAdd = false
+        disableUndo = false
+        disableRedo = false
+    }
+
+    console.log('[LISTCARD] Add disabled?: ', disableAdd)
+    console.log('[LISTCARD] Undo disabled?: ', disableUndo)
+    console.log('[LISTCARD] Redo disabled?: ', disableRedo)
 
 
     let selectClass = "unselected-list-card";
@@ -115,90 +140,6 @@ function ListCard(props) {
             cursor: 'not-allowed',
         }
     }
-
-  
-    // let cardElement =
-    //     <Box
-    //         id={idNamePair._id}
-    //         className = {'list-box list-card ' + selectClass + " "}
-    //         key={idNamePair._id}
-    //         sx={{
-    //             display: 'flex', 
-    //             p: 1,
-    //             height: '30vh'
-    //         }}
-    //         style={{fontSize: '32pt' }}
-    //     >
-            // <Grid container
-            //      direction="row"
-            //      justifyContent="space-between"
-            //      alignItems="center"
-            // >
-            //     <Grid item>
-            //         <Stack>
-            //             <Typography fontSize={'28pt'} >{idNamePair.name}</Typography>
-            //             <Typography fontSize={'10pt'} >By: </Typography>
-            //             <Typography fontSize={'10pt'}>Published: </Typography>
-            //         </Stack>
-            //     </Grid>
-            //     <Grid item>
-            //         <Grid container
-            //             direction = 'column'
-            //         >
-            //             <Grid item>
-            //                 <Stack  
-            //                 direction="row"
-            //                 spacing = {3}>
-            //                     <Box>
-            //                         <IconButton>
-            //                             <ThumbUpIcon>
-            //                             </ThumbUpIcon>
-            //                             <Typography>2</Typography>
-            //                         </IconButton>
-            //                     </Box>
-            //                     <Box>
-            //                         <IconButton>
-            //                             <ThumbDownIcon>
-            //                             </ThumbDownIcon>
-            //                             <Typography>2</Typography>
-            //                         </IconButton>
-            //                     </Box>
-            //                 </Stack>
-            //             </Grid>
-            //             <Grid item align = 'right'>
-            //                 <Grid container
-            //                     direction = 'row'
-            //                     justifyContent="space-between"
-            //                     alignItems="center"
-            //                 >
-            //                     <Grid item>
-            //                         <Typography fontSize={'10pt'}>Listens:</Typography>
-            //                     </Grid>
-            //                     <Grid item align = 'right'>
-            //                         <IconButton>
-            //                             <KeyboardDoubleArrowDownIcon>
-            //                             </KeyboardDoubleArrowDownIcon>
-            //                         </IconButton>
-            //                     </Grid>
-            //                 </Grid>
-            //             </Grid>
-            //         </Grid>
-            //     </Grid>
-            // </Grid>
-    //         <Box>
-            // {
-            //     idNamePair.playlist.songs.map((song, index) => (
-            //         <SongCard
-            //             id={'playlist-song-' + (index)}
-            //             key={'playlist-song-' + (index)}
-            //             index={index}
-            //             song={song}
-            //         />
-            //     ))  
-            // }
-    //         </Box>
-    //     </Box>
-
 
     // CHECK IF THE LIST HAS BEEN PUBLISHED BY THE USER OR NOT 
     let publishedInfo = ''
@@ -241,10 +182,7 @@ function ListCard(props) {
         playlistListens = 
         <Typography fontSize={'10pt'} display='inline'>Listens: <Typography fontSize='10pt' sx={{color: 'red'}} display="inline">0</Typography></Typography>
     }
-    
-
-    console.log(store.currentList)
-    
+       
     let cardElement = 
         <Accordion
             expanded = {idNamePair._id === currentListID}
@@ -336,15 +274,16 @@ function ListCard(props) {
                     mb = {2}
                 >
                     <Button
+                        className = 'list-card'
                         sx = {{
-                            color : 'black',
-                            fontSize: 18
+                            fontSize: 16,
                         }}
+                        variant = 'contained'
+                        onClick={() => handleAddNewSong()}
                     >
                         +
                     </Button>
                 </Box>
-        
                 <Stack
                     direction = 'row'
                     alignItems= 'center'
@@ -355,8 +294,8 @@ function ListCard(props) {
                         alignItems= 'center'
                         spacing = {1}
                     >
-                        <Button variant = 'contained'> Undo</Button>
-                        <Button variant = 'contained'> Redo </Button>
+                        <Button disabled = {!disableUndo} variant = 'contained' onClick={() => handleUndo()}> Undo</Button>
+                        <Button disabled = {!disableRedo} variant = 'contained' onClick={() => handleRedo()} > Redo </Button>
                     </Stack>
 
                     <Stack

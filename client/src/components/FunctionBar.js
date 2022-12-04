@@ -75,12 +75,12 @@ export default function FunctionBar(){
                         </HomeIcon>
                     </IconButton>
                     <IconButton>
-                        <PersonIcon>
-                        </PersonIcon>
-                    </IconButton>
-                    <IconButton>
                         <PeopleIcon>
                         </PeopleIcon>
+                    </IconButton>
+                    <IconButton>
+                        <PersonIcon>
+                        </PersonIcon>
                     </IconButton>
                 </Stack>
                 <TextField id="filled-basic" variant="filled" sx={{ flexGrow: 0.5 }} label="Search Playlists"/>

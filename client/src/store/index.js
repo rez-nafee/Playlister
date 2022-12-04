@@ -253,8 +253,6 @@ function GlobalStoreContextProvider(props) {
     store.closeCurrentList = function () {
         // Clear the transaction stack
         tps.clearAllTransactions();
-        // Push the user back to the home screen after closing the list 
-        history.push("/")
         // Update out state
         storeReducer({
             type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
@@ -369,7 +367,7 @@ function GlobalStoreContextProvider(props) {
         storeReducer({
             type: GlobalStoreActionType.EDIT_SONG,
             payload: {currentSongIndex: songIndex, currentSong: songToEdit}
-        });        
+        });      
     }
 
     // Show the remove song modal to verify that they want to remove the song from the playlist
@@ -446,23 +444,34 @@ function GlobalStoreContextProvider(props) {
     store.moveSong = function(start, end) {
         let list = store.currentList;
 
-        // WE NEED TO UPDATE THE STATE FOR THE APP
-        if (start < end) {
-            let temp = list.songs[start];
-            for (let i = start; i < end; i++) {
-                list.songs[i] = list.songs[i + 1];
-            }
-            list.songs[end] = temp;
-        }
-        else if (start > end) {
-            let temp = list.songs[start];
-            for (let i = start; i > end; i--) {
-                list.songs[i] = list.songs[i - 1];
-            }
-            list.songs[end] = temp;
-        }
+        var songs = [...store.currentList.songs]
+        let temp = songs[start]
+        songs[start] = songs[end]
+        songs[end] = temp
 
-        // NOW MAKE IT OFFICIAL
+        list.songs = songs
+    
+        console.log('[STORE] SONGS AFTER MOVING: ', songs)
+        
+        
+        // // WE NEED TO UPDATE THE STATE FOR THE APP
+        // if (start < end) {
+        //     let temp = list.songs[start];
+        //     for (let i = start; i < end; i++) {
+        //         list.songs[i] = list.songs[i + 1];
+        //     }
+        //     list.songs[end] = temp;
+        // }
+        // else if (start > end) {
+        //     let temp = list.songs[start];
+        //     for (let i = start; i > end; i--) {
+        //         list.songs[i] = list.songs[i - 1];
+        //     }
+        //     list.songs[end] = temp;
+        // }
+
+        // console.log('[STORE] SONGS AFTER MOVING: ', list.songs)
+
         store.updateCurrentList();
     }
     // THIS FUNCTION REMOVES THE SONG AT THE index LOCATION
@@ -476,6 +485,7 @@ function GlobalStoreContextProvider(props) {
     }
     // THIS FUNCTION UPDATES THE TEXT IN THE ITEM AT index TO text
     store.updateSong = function(index, songData) {
+        console.log("[STORE] UPDATING SONG...")
         let list = store.currentList;
         let song = list.songs[index];
         song.title = songData.title;
@@ -502,7 +512,11 @@ function GlobalStoreContextProvider(props) {
         tps.addTransaction(transaction);
     }    
     store.addMoveSongTransaction = function (start, end) {
-        if (!start == end){
+        console.log("[STORE] MOVING SONG:")
+        console.log("Starting Index: ", start)
+        console.log("Ending Index: ", end)
+        console.log(start !== end)
+        if (start != end){
             let transaction = new MoveSong_Transaction(store, start, end);
             tps.addTransaction(transaction);
         }
@@ -521,6 +535,9 @@ function GlobalStoreContextProvider(props) {
             artist: song.artist,
             youTubeId: song.youTubeId
         };
+
+        console.log("[UPDATE SONG TRANSACTION] Old Song: ", oldSongData)
+        console.log("[UPDATE SONG TRANSACTION] New Song: ", newSongData)
         const haveSameData = function(obj1, obj2) {
             const obj1Length = Object.keys(obj1).length;
             const obj2Length = Object.keys(obj2).length;
@@ -542,10 +559,13 @@ function GlobalStoreContextProvider(props) {
         async function asyncUpdateCurrentList() {
             const response = await api.updatePlaylistById(store.currentList._id, store.currentList);
             if (response.data.success) {
+                console.log('[UPDATING PLAYLIST] SUCCESSFUL!')
+                console.log('[UPDATING PLAYLIST] UPDATED PLAYLIST:')
                 storeReducer({
                     type: GlobalStoreActionType.SET_CURRENT_LIST,
                     payload: store.currentList
                 });
+                store.loadIdNamePairs();
             }
         }
         asyncUpdateCurrentList();

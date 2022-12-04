@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
-import FunctionBar from './FunctionBar';
+import MUIEditSongModal from './MUIEditSongModal'
+import MUIRemoveSongModal from './MUIRemoveSongModal'
 
 // IMPORT OUR MUI COMPONENTS
 import AddIcon from '@mui/icons-material/Add';
@@ -11,7 +12,6 @@ import Tab from '@mui/material/Tab';
 import { TextField } from '@mui/material';
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
@@ -29,6 +29,14 @@ const HomeScreen = () => {
     useEffect(() => {
         store.loadIdNamePairs();
     }, []);
+
+    let modalJSX = "";
+    if (store.isEditSongModalOpen()) {
+        modalJSX = <MUIEditSongModal />;
+    }
+    else if (store.isRemoveSongModalOpen()) {
+        modalJSX = <MUIRemoveSongModal />;
+    }
 
     function handleCreateNewList() {
         console.log("creating new playlist")
@@ -133,6 +141,31 @@ const HomeScreen = () => {
             />
         </Grid>
     }
+
+    let statusbar = 
+    <Box id="playlister-statusbar">
+        <IconButton 
+            aria-label="add-list" 
+            size = "large"  
+            sx={{ 
+                color: "white", 
+                backgroundColor: "black", 
+                borderRadius: "50%" 
+            }}
+            onClick={() => handleCreateNewList()}
+        >
+            <AddIcon>
+            </AddIcon>
+        </IconButton>
+        <Typography variant="h4">Your Lists</Typography>
+    </Box>
+    if(store.currentList){
+        console.log(store.currentList)
+        statusbar = 
+        <Box id="playlister-statusbar">
+            <Typography variant="h4">{store.currentList.name}</Typography>
+        </Box>
+    }
     
     let style = {}
     if(disableBtns){
@@ -180,7 +213,7 @@ const HomeScreen = () => {
                                 onChange={(e, val) => setValue(val)}
                             >
                                 <Tab value = 'player' label = 'Player'/>
-                                <Tab value = 'comments' label = 'Comments'/>
+                                <Tab value = 'comments' label = 'Comments' disabled = {!store.currentList}/>
                             </Tabs>
                         </Grid>
                         {
@@ -189,23 +222,13 @@ const HomeScreen = () => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Box id="playlister-statusbar">
-                <IconButton 
-                    aria-label="add-list" 
-                    size = "large"  
-                    sx={{ 
-                    color: "white", 
-                    backgroundColor: "black", 
-                    borderRadius: "50%" 
-                    }}
-                    onClick={() => handleCreateNewList()}
-                >
-                    <AddIcon>
-                    </AddIcon>
-                </IconButton>
-                <Typography variant="h4">Your Lists</Typography>
-            </Box>
+            {
+                statusbar
+            }
             <MUIDeleteModal></MUIDeleteModal>
+            {
+                modalJSX
+            }
         </>
         )
 }

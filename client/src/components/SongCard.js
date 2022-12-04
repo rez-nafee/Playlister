@@ -6,33 +6,21 @@ function SongCard(props) {
     const [ draggedTo, setDraggedTo ] = useState(0);
     const { song, index } = props;
 
-    function handleDragStart(event) {
-        event.dataTransfer.setData("song", index);
+    const handleDragStart = (event) => {
+        event.dataTransfer.setData("drag-start-song", event.target.id)
     }
-
-    function handleDragOver(event) {
+    
+    const handleDrop = (event) => {
+        event.preventDefault()
+        console.log("Drag started from: ", event.dataTransfer.getData("drag-start-song").match((/(\d+)/))[0])
+        console.log("Drag ended from: ", event.target.id.match((/(\d+)/))[0])
+        store.addMoveSongTransaction(event.dataTransfer.getData("drag-start-song").match((/(\d+)/))[0], event.target.id.match((/(\d+)/))[0])
+    }
+    
+    const handleDragOver = (event) => {
         event.preventDefault();
     }
 
-    function handleDragEnter(event) {
-        event.preventDefault();
-        setDraggedTo(true);
-    }
-
-    function handleDragLeave(event) {
-        event.preventDefault();
-        setDraggedTo(false);
-    }
-
-    function handleDrop(event) {
-        event.preventDefault();
-        let targetIndex = index;
-        let sourceIndex = Number(event.dataTransfer.getData("song"));
-        setDraggedTo(false);
-
-        // UPDATE THE LIST
-        store.addMoveSongTransaction(sourceIndex, targetIndex);
-    }
     function handleRemoveSong(event) {
         event.preventDefault();
         store.showRemoveSongModal(index, song);
@@ -59,21 +47,11 @@ function SongCard(props) {
             className={cardClass}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
-            onDragEnter={handleDragEnter}
-            onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             draggable="true"
             onClick={handleClick}
         >
-            {index + 1}.
-            <a
-                id={'song-' + index + '-link'}
-                className="song-link"
-                target="_blank"
-                rel="noreferrer"
-                href={"https://www.youtube.com/watch?v=" + song.youTubeId}>
-                {song.title} by {song.artist}
-            </a>
+            {index + 1}. {song.title} by {song.artist}
             <input
                 type="button"
                 id={"remove-song-" + index}
