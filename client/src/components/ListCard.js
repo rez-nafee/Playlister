@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useState, useRef, useEffect } from 'react'
 import { GlobalStoreContext } from '../store'
 
 import SongCard from './SongCard.js'
@@ -28,6 +28,15 @@ function ListCard(props) {
 
     console.log(store.currentList)
     console.log(store)
+ 
+    const listCard = useRef(null);
+
+    useEffect(() => {
+        if (listCard.current) {
+          listCard.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      },
+      [store.currentList])
 
     const {idNamePair, selected} = props;
 
@@ -73,9 +82,16 @@ function ListCard(props) {
             toggleEdit();
         }
     }
+
     function handleUpdateText(event) {
         setText(event.target.value);
     }
+
+    //
+    function handleDuplicate(){
+        store.duplicatePlaylist()
+    }
+
 
     let selectClass = "unselected-list-card";
     if (selected) {
@@ -100,6 +116,7 @@ function ListCard(props) {
         }
     }
 
+  
     // let cardElement =
     //     <Box
     //         id={idNamePair._id}
@@ -223,12 +240,11 @@ function ListCard(props) {
         </Stack>
         playlistListens = 
         <Typography fontSize={'10pt'} display='inline'>Listens: <Typography fontSize='10pt' sx={{color: 'red'}} display="inline">0</Typography></Typography>
-        
     }
     
 
     console.log(store.currentList)
-
+    
     let cardElement = 
         <Accordion
             expanded = {idNamePair._id === currentListID}
@@ -238,6 +254,7 @@ function ListCard(props) {
             }}
         >
             <AccordionSummary
+                ref = {idNamePair._id === currentListID ? listCard  : null}
                 id={idNamePair._id}
                 className = {'list-box list-card ' + selectClass + " "}
                 key={idNamePair._id}
@@ -349,7 +366,7 @@ function ListCard(props) {
                     >
                         <Button variant = 'contained'>Publish</Button>
                         <Button variant = 'contained' onClick={() => handleDeleteList()}>Delete</Button>
-                        <Button variant = 'contained'>Duplicate</Button>
+                        <Button variant = 'contained' onClick={() => handleDuplicate()}>Duplicate</Button>
                     </Stack>
                 </Stack>
             </AccordionDetails>

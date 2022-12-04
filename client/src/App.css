@@ -326,7 +326,7 @@ input {
   position: relative;
   max-width: 800px;
   max-height: 80vh;
-  background: var(--swatch-complement);
+  background-color: white;
   overflow: auto;
   cursor: default;
   border-width: 5px;
@@ -342,8 +342,9 @@ input {
   font-size:32pt;
   padding: 5px;
   font-weight: bold;
-  background-color: #669966;
-  color:white;
+  background-color: lightgrey;
+  color:black;
+
 }
 
 .modal-south {

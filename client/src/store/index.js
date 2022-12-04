@@ -303,6 +303,27 @@ function GlobalStoreContextProvider(props) {
         asyncLoadIdNamePairs();
     }
 
+    store.duplicatePlaylist = async function () {
+        console.log("STORE: duplicating playlist...")
+        // Copy the current fields of the playlist
+        console.log(store.currentList)
+        // Copy all the fields
+        let newListName = "Copy of " + store.currentList.name
+        let author = auth.user.firstName + " " + auth.user.lastName
+        let songs = JSON.parse(JSON.stringify(store.currentList.songs))
+    
+        const response = await api.createPlaylist(newListName, songs, auth.user.email, author);
+        if (response.status === 201) {
+            tps.clearAllTransactions();
+            let newList = response.data.playlist;
+            store.currentList = newList
+            store.loadIdNamePairs()
+        }
+        else {
+            console.log("API FAILED TO CREATE A NEW LIST");
+        }
+    }
+
     // THE FOLLOWING 5 FUNCTIONS ARE FOR COORDINATING THE DELETION
     // OF A LIST, WHICH INCLUDES USING A VERIFICATION MODAL. THE
     // FUNCTIONS ARE markListForDeletion, deleteList, deleteMarkedList,

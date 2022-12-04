@@ -49,6 +49,10 @@ createPlaylist = (req, res) => {
     })
 }
 
+duplicatePlaylist = (req, res) => {
+    console.log("Duplicating playlist....")
+}
+
 deletePlaylist = async (req, res) => {
     console.log("delete Playlist with id: " + JSON.stringify(req.params.id));
     console.log("delete " + req.params.id);
