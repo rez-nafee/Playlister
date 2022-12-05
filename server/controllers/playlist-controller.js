@@ -96,22 +96,23 @@ getPlaylistById = async (req, res) => {
         }
         console.log("Found list: " + JSON.stringify(list));
 
-        // DOES THIS LIST BELONG TO THIS USER?
-        async function asyncFindUser(list) {
-            await User.findOne({ email: list.ownerEmail }, (err, user) => {
-                console.log("user._id: " + user._id);
-                console.log("req.userId: " + req.userId);
-                if (user._id == req.userId) {
-                    console.log("correct user!");
-                    return res.status(200).json({ success: true, playlist: list })
-                }
-                else {
-                    console.log("incorrect user!");
-                    return res.status(400).json({ success: false, description: "authentication error" });
-                }
-            });
-        }
-        asyncFindUser(list);
+        // // DOES THIS LIST BELONG TO THIS USER?
+        // async function asyncFindUser(list) {
+        //     await User.findOne({ email: list.ownerEmail }, (err, user) => {
+        //         console.log("user._id: " + user._id);
+        //         console.log("req.userId: " + req.userId);
+        //         if (user._id == req.userId) {
+        //             console.log("correct user!");
+        //             return res.status(200).json({ success: true, playlist: list })
+        //         }
+        //         else {
+        //             console.log("incorrect user!");
+        //             return res.status(400).json({ success: false, description: "authentication error" });
+        //         }
+        //     });
+        // }
+        // asyncFindUser(list);
+        return res.status(200).json({ success: true, playlist: list })
     }).catch(err => console.log(err))
 }
 
@@ -208,6 +209,8 @@ updatePlaylist = async (req, res) => {
                     list.likes = body.playlist.likes
                     list.dislikes = body.playlist.dislikes
                     list.listens = body.playlist.listens
+                    list.likedBy = body.playlist.likedBy
+                    list.dislikedBy = body.playlist.dislikedBy
 
                     //SAVE THE PLAYLIST !
                     list

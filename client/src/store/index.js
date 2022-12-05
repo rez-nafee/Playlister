@@ -249,6 +249,53 @@ function GlobalStoreContextProvider(props) {
         asyncChangeListName(id);
     }
 
+    store.updatePlaylistLikesById = function(id, likes, dislikes, active){
+        async function asyncGetPlaylist(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                console.log('[STORE] GOT THE PLAYLIST. UPDATING LIKES....')
+                let playlist = response.data.playlist;
+                playlist.likes = likes
+                playlist.dislikes = dislikes 
+                if(active === 'like'){
+                    if(playlist.likedBy.indexOf(auth.user.email) === -1){
+                        playlist.likedBy.push(auth.user.email)
+                    }
+                    if(playlist.dislikedBy.indexOf(auth.user.email) !== -1){
+                        playlist.dislikedBy.splice(playlist.dislikedBy.indexOf(auth.user.email), 1)
+                    }
+                }
+                if(active === 'dislike'){
+                    if(playlist.dislikedBy.indexOf(auth.user.email) === -1){
+                        playlist.dislikedBy.push(auth.user.email)
+                    }
+                    if(playlist.likedBy.indexOf(auth.user.email) !== -1){
+                        playlist.likedBy.splice(playlist.likedBy.indexOf(auth.user.email), 1)
+                    }
+                }
+                if(active === 'none'){
+                    if(playlist.likedBy.indexOf(auth.user.email) !== -1){
+                        playlist.likedBy.splice(playlist.likedBy.indexOf(auth.user.email), 1)
+                    }
+                    if(playlist.dislikedBy.indexOf(auth.user.email) !== -1){
+                        playlist.dislikedBy.splice(playlist.dislikedBy.indexOf(auth.user.email), 1)
+                    }
+                }
+                console.log('[STORE] After updating the likes of the playlist: ',playlist)
+                async function updateList(playlist) {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        console.log('[STORE] SUCCESSFUL IN UPDATING PLAYLIST')
+                        store.loadIdNamePairs()
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        console.log('[STORE] UPDATING LIKES OF PLAYLIST...')
+        asyncGetPlaylist(id);
+    }
+
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
     store.closeCurrentList = function () {
         // Clear the transaction stack

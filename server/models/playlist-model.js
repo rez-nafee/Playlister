@@ -19,7 +19,9 @@ const playlistSchema = new Schema(
         comments: {type: [{
             comment: String,
             author: String
-        }], default: []}
+        }], default: []},
+        likedBy: {type: [], default: []},
+        dislikedBy: {type: [], default: []}
     },
     { timestamps: true },
 )

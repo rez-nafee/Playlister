@@ -71,7 +71,7 @@ const HomeScreen = () => {
             <ReactPlayer 
                 url='https://www.youtube.com/watch?v=ysz5S6PUM-U'
                 width={'50vw'}
-                height={'42vh'}
+                height={'40vh'}
             />
             <Box
                 sx={

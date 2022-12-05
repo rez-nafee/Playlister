@@ -4,6 +4,7 @@ import { GlobalStoreContext } from '../store'
 import SongCard from './SongCard.js'
 
 //IMPORT OUR MATERIAL UI COMPONENTS
+import AuthContext from '../auth';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -23,8 +24,30 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
+    const {idNamePair, selected} = props;
     const [editActive, setEditActive] = useState(false);
+
+    const [likes, setLikes] = useState(idNamePair.playlist.likes)
+    const [dislikes, setDislikes] = useState(idNamePair.playlist.dislikes)
+    const [listens, setListens] = useState(idNamePair.playlist.listens)
     const [text, setText] = useState('');
+
+    let active = ''
+    if (idNamePair.playlist.likedBy.indexOf(auth.user.email) !== -1){
+        console.log('[LIST CARD] I LIKED THIS PLAYLIST!')
+        active = 'like'
+    } else if (idNamePair.playlist.dislikedBy.indexOf(auth.user.email) !== -1){
+        console.log('[LIST CARD] I DISLIKED THIS PLAYLIST!')
+        active = 'dislike'
+    } else{
+        console.log('[LIST CARD] NEVER LIKED THIS PLAYLIST!')
+        active = 'none'
+    }
+
+    const [activeLike, setActiveLike] = useState(active)
+
+    console.log('[LIST CARD] Active like? ', activeLike)
  
     const listCard = useRef(null);
 
@@ -35,7 +58,16 @@ function ListCard(props) {
       },
       [store.currentList])
 
-    const {idNamePair, selected} = props;
+    useEffect(() =>{
+        console.log('[LIST CARD] Likes?', likes)
+        store.updatePlaylistLikesById(idNamePair._id, likes, dislikes, activeLike)
+    }, [likes])
+
+    useEffect(() =>{
+        console.log('[LIST CARD] diskes?', dislikes)
+        store.updatePlaylistLikesById(idNamePair._id, likes, dislikes, activeLike)
+    }, [dislikes])
+    
 
     function handleLoadList() {
         console.log('ID of List: ', idNamePair._id)
@@ -124,6 +156,51 @@ function ListCard(props) {
         disableDuplicate = false
         disableDelete = false
     }
+
+    const handleLike = () => {
+        console.log('[LIST CARD] Like button clicked!')
+        if (activeLike === "none") {
+            setLikes(likes + 1);
+            setActiveLike("like");
+            
+        }
+       
+        if (activeLike === 'like'){
+            setLikes(likes - 1);
+            setActiveLike("none");
+        }
+       
+        if (activeLike === "dislike") {
+            setLikes(likes + 1);
+            setDislikes(dislikes - 1);
+            setActiveLike("like");
+        }  
+    }
+
+    const handleDislike = () => {
+        console.log('[LIST CARD] Dislike button clicked!')
+        if (activeLike === "none") {
+            setDislikes(dislikes + 1);
+            setActiveLike("dislike");
+            //UPDATE ON BACKEND
+        }
+       
+        if (activeLike === 'dislike'){
+            setDislikes(dislikes - 1);
+            setActiveLike("none");
+            //UPDATE ON BACKEND!
+        }
+       
+        if (activeLike === "like") {
+            console.log()
+            setDislikes(dislikes + 1);
+            setLikes(likes - 1);
+            setActiveLike("dislike");
+            //UPDATE ON BACKEND
+        }  
+    }
+
+    
 
     console.log('[LISTCARD] Add disabled?: ', disableAdd)
     console.log('[LISTCARD] Undo disabled?: ', disableUndo)
@@ -228,6 +305,7 @@ function ListCard(props) {
             </Stack>
         </Stack>
     }
+
     else {
         // PLAYLIST IS PUBLISHED
         console.log("PLAYLIST IS PUBLISHED!")
@@ -245,24 +323,35 @@ function ListCard(props) {
             direction="row"
             spacing = {3}>
             <Box>
-                <IconButton>
-                        <ThumbUpIcon>
-                        </ThumbUpIcon>
-                        <Typography>{idNamePair.playlist.likes}</Typography>
+                <IconButton
+                    onClick = {() => handleLike()}
+                    sx = {{
+                        pointerEvents: "auto",
+                        color : 'blue'
+                    }}
+                >
+                        <ThumbUpIcon></ThumbUpIcon>
+                        <Typography>{likes}</Typography>
                 </IconButton>
             </Box>
             <Box>
-                <IconButton>
+                <IconButton
+                    onClick = {() => handleDislike()}
+                    sx = {{
+                        pointerEvents: "auto",
+                        color : 'red'
+                    }}
+                >
                     <ThumbDownIcon>
                     </ThumbDownIcon>
-                    <Typography>{idNamePair.playlist.dislikes}</Typography>
-                    </IconButton>
+                    <Typography>{dislikes}</Typography>
+                </IconButton>
             </Box>
         </Stack>
 
         // SHOW THE # OF LISTENS FOR THE PLAYLIST
         playlistListens = 
-        <Typography fontSize={'10pt'} display='inline'>Listens: <Typography fontSize='10pt' sx={{color: 'red'}} display="inline">0</Typography></Typography>
+        <Typography fontSize={'10pt'} display='inline'>Listens: <Typography fontSize='10pt' sx={{color: 'violet'}} display="inline">{listens}</Typography></Typography>
     
         // SHOW THE SONGS AS TYPOGRAPHY
         playlistSongs = 
@@ -338,7 +427,7 @@ function ListCard(props) {
                     pointerEvents : mouse,
                     border: 1,
                 }}
-                onDoubleClick = {handleToggleEdit}
+                onDoubleClick = {idNamePair.playlist.published ? null : handleToggleEdit}
                 expandIcon = {
                     <KeyboardDoubleArrowDownIcon
                         sx={{
