@@ -65,12 +65,28 @@ const HomeScreen = () => {
         }
     }, [urlList])
 
+    function arraysEqual(a, b) {
+        if (a === b) return true;
+        if (a == null || b == null) return false;
+        if (a.length !== b.length) return false;
+      
+        for (var i = 0; i < a.length; ++i) {
+          if (a[i] !== b[i]) return false;
+        }
+        return true;
+      }
+
     function loadVideos(playlist){
         console.log('[HOME SCREEN] Playlist clicked? ', playlist)
         var vidList = playlist.songs.map((a) => "https://www.youtube.com/watch?v=" + a.youTubeId)
         console.log('[HOME SCREEN] URL List:  ', vidList)
-        setUrlList(vidList)
-        setPlaylist(playlist)
+        console.log('[HOME SCREEN] URL List:  ', urlList)
+        console.log('[HOME SCREEN] URL list the same?', )
+        if(!arraysEqual(vidList, urlList)){
+            console.log('[HOME SCREEN] DIFFERENT URL LIST LOADED...')
+            setUrlList(vidList)
+            setPlaylist(playlist)
+        }
     }
 
     function pauseVideo(){
