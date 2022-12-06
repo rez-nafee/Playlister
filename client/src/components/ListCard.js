@@ -163,12 +163,12 @@ function ListCard(props) {
         disableDelete = false
     }
 
-    const handleLike = () => {
+    const handleLike = (e) => {
+        e.stopPropagation();
         console.log('[LIST CARD] Like button clicked!')
         if (activeLike === "none") {
             setLikes(likes + 1);
-            setActiveLike("like");
-            
+            setActiveLike("like"); 
         }
        
         if (activeLike === 'like'){
@@ -183,7 +183,8 @@ function ListCard(props) {
         }  
     }
 
-    const handleDislike = () => {
+    const handleDislike = (e) => {
+        e.stopPropagation();
         console.log('[LIST CARD] Dislike button clicked!')
         if (activeLike === "none") {
             setDislikes(dislikes + 1);
@@ -198,7 +199,6 @@ function ListCard(props) {
         }
        
         if (activeLike === "like") {
-            console.log()
             setDislikes(dislikes + 1);
             setLikes(likes - 1);
             setActiveLike("dislike");
@@ -330,7 +330,7 @@ function ListCard(props) {
             spacing = {3}>
             <Box>
                 <IconButton
-                    onClick = {() => handleLike()}
+                    onClick = {(e) => handleLike(e)}
                     sx = {{
                         pointerEvents: "auto",
                         color : 'blue'
@@ -342,7 +342,7 @@ function ListCard(props) {
             </Box>
             <Box>
                 <IconButton
-                    onClick = {() => handleDislike()}
+                    onClick = {(e) => handleDislike(e)}
                     sx = {{
                         pointerEvents: "auto",
                         color : 'red'
