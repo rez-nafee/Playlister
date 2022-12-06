@@ -4,6 +4,7 @@ import ListCard from './ListCard.js'
 import MUIDeleteModal from './MUIDeleteModal'
 import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
+import FunctionBarContext from '../context/FunctionBarContext';
 
 // IMPORT OUR MUI COMPONENTS
 import AddIcon from '@mui/icons-material/Add';
@@ -23,6 +24,7 @@ import YouTubePlayer from 'react-player/youtube'
 
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const {sort, setSort, search, setSearch, isHome, setIsHome, isPeople, setIsPeople, isUser, setIsUser} = useContext(FunctionBarContext)
     const [value, setValue]= useState('player');
     const [urlList, setUrlList] = useState([])
     const [url, setUrl] = useState('')
@@ -144,8 +146,10 @@ const HomeScreen = () => {
     }
     let listCard = "";
     if (store && store.idNamePairs.length > 0) {
-        listCard =
-                // Sorts the List by their name and then create the list card elements for the user.
+        switch(sort){
+            case 'Names (A-Z)':
+                listCard =
+                // If search field is present and the sort is selected for Names (A-Z)
                 store.idNamePairs.sort((a,b) => a.name.localeCompare(b.name, undefined , {numeric: true, sensitivity: 'base'})).map((pair) => 
                 (
                     <ListCard
@@ -155,7 +159,155 @@ const HomeScreen = () => {
                         loadVideos = {loadVideos}
                     />
                 ))
+                break;
+            case 'Publish Date (Newest)':
+                listCard =
+                store.idNamePairs.sort((a,b) => a.playlist.date.localeCompare(b.playlist.date, undefined , {numeric: true, sensitivity: 'base'})).reverse().map((pair) => 
+                (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        loadVideos = {loadVideos}
+                    />
+                ))
+                break;
+            case 'Listens (High to Low)':
+                listCard =
+                // If search field is present 
+                store.idNamePairs.sort((a,b) => b.playlist.listens - a.playlist.listens ).map((pair) => 
+                (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        loadVideos = {loadVideos}
+                    />
+                ))
+                break;
+            case 'Likes (High to Low)':
+                listCard =
+                // If search field is present 
+                store.idNamePairs.sort((a,b) => b.playlist.likes - a.playlist.likes).map((pair) => 
+                (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        loadVideos = {loadVideos}
+                    />
+                ))
+                break;
+            case 'Dislikes (High to Low)':
+                listCard =
+                // If search field is present 
+                store.idNamePairs.sort((a,b) => b.playlist.dislikes - a.playlist.dislikes).map((pair) => 
+                (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        loadVideos = {loadVideos}
+                    />
+                ))
+                break;
+            default:
+                listCard =
+                // If search field is present 
+                store.idNamePairs.map((pair) => 
+                (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        loadVideos = {loadVideos}
+                    />
+                ))
+        }
     }
+    
+    if (store && store.idNamePairs.length > 0 && search) {
+        switch(sort){
+            case 'Names (A-Z)':
+                listCard =
+                // If search field is present and the sort is selected for Names (A-Z)
+                store.idNamePairs.filter((a) => a.playlist.name.includes(search)).sort((a,b) => a.name.localeCompare(b.name, undefined , {numeric: true, sensitivity: 'base'})).reverse().map((pair) => 
+                (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        loadVideos = {loadVideos}
+                    />
+                ))
+                break;
+            case 'Publish Date (Newest)':
+                listCard =
+                // If search field is present and the sort is selected for Names (A-Z)
+                store.idNamePairs.filter((a) => a.playlist.name.includes(search)).sort((a,b) => a.playlist.date.localeCompare(b.playlist.date, undefined , {numeric: true, sensitivity: 'base'})).reverse().map((pair) => 
+                (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        loadVideos = {loadVideos}
+                    />
+                ))
+                break;
+            case 'Listens (High to Low)':
+                listCard =
+                // If search field is present 
+                store.idNamePairs.filter((a) => a.playlist.name.includes(search)).sort((a,b) => b.playlist.listens - a.playlist.listens ).map((pair) => 
+                (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        loadVideos = {loadVideos}
+                    />
+                ))
+                break;
+            case 'Likes (High to Low)':
+                listCard =
+                // If search field is present 
+                store.idNamePairs.filter((a) => a.playlist.name.includes(search)).sort((a,b) => b.playlist.likes - a.playlist.likes).map((pair) => 
+                (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        loadVideos = {loadVideos}
+                    />
+                ))
+                break;
+            case 'Dislikes (High to Low)':
+                listCard =
+                // If search field is present 
+                store.idNamePairs.filter((a) => a.playlist.name.includes(search)).sort((a,b) => b.playlist.dislikes - a.playlist.dislikes).map((pair) => 
+                (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        loadVideos = {loadVideos}
+                    />
+                ))
+                break;
+            default:
+                listCard =
+                // If search field is present 
+                store.idNamePairs.filter((a) => a.playlist.name.includes(search)).map((pair) => 
+                (
+                    <ListCard
+                        key={pair._id}
+                        idNamePair={pair}
+                        selected={false}
+                        loadVideos = {loadVideos}
+                    />
+                ))
+        }
+    }
+    
 
     let disableBtns = false
 

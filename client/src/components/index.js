@@ -14,6 +14,8 @@ import Statusbar from './Statusbar'
 import WorkspaceScreen from './WorkspaceScreen'
 import MUIAccountError from './MUIAccountError'
 import FunctionBar from "./FunctionBar"
+import PeopleScreen from './PeopleScreen'
+import UserScreen from './UserScreen'
 
 /*
     This serves as a module so that we can import
@@ -38,5 +40,7 @@ export {
     Statusbar, 
     WorkspaceScreen,
     MUIAccountError,
-    FunctionBar
+    FunctionBar,
+    PeopleScreen,
+    UserScreen
  }

@@ -1,8 +1,9 @@
-import { useContext, useState } from 'react';
+import { useContext, useState} from 'react';
 import AuthContext from '../auth';
 import { GlobalStoreContext } from '../store'
+import FunctionBarContext from '../context/FunctionBarContext';
+import { useHistory } from 'react-router-dom'
 
-import EditToolbar from './EditToolbar'
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AppBar from '@mui/material/AppBar';
@@ -23,14 +24,13 @@ import SortIcon from '@mui/icons-material/Sort';
 
 export default function FunctionBar(){
     const { auth } = useContext(AuthContext);
+    const { store } = useContext(GlobalStoreContext);
+    const {sort, setSort, search, setSearch, isHome, setIsHome, isPeople, setIsPeople, isUser, setIsUser} = useContext(FunctionBarContext)
+    store.history = useHistory();
+
     const [anchorEl, setAnchorEl] = useState(null);
     const isMenuOpen = Boolean(anchorEl);
-    const { store } = useContext(GlobalStoreContext);
-
-    const[isHome, setIsHome] = useState(true)
-    const[isPeople, setIsPeople] = useState(false)
-    const[isUser, setIsUser] = useState(false)
-
+    
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -38,6 +38,11 @@ export default function FunctionBar(){
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
+
+    const handleSelection = (e) => {
+        setSort(e.target.innerText)
+        handleMenuClose()
+    }
 
     const menuId = 'primary-search-account-menu';
     const menu = 
@@ -56,11 +61,11 @@ export default function FunctionBar(){
             open={isMenuOpen}
             onClose={handleMenuClose}
         >
-            <MenuItem>Names (A-Z)</MenuItem>
-            <MenuItem>Publish Date (Newest)</MenuItem>
-            <MenuItem>Listens (High to Low)</MenuItem>
-            <MenuItem>Likes (High to Low)</MenuItem>
-            <MenuItem>Dislikes (High to Low)</MenuItem>
+            <MenuItem onClick={(e) => handleSelection(e)}>Names (A-Z)</MenuItem>
+            <MenuItem onClick={(e) => handleSelection(e)}>Publish Date (Newest)</MenuItem>
+            <MenuItem onClick={(e) => handleSelection(e)}>Listens (High to Low)</MenuItem>
+            <MenuItem onClick={(e) => handleSelection(e)}>Likes (High to Low)</MenuItem>
+            <MenuItem onClick={(e) => handleSelection(e)}>Dislikes (High to Low)</MenuItem>
         </Menu> 
         
     let home = 'green'
@@ -114,6 +119,7 @@ export default function FunctionBar(){
         setIsHome(true)
         setIsPeople(false)
         setIsUser(false)
+        store.history.push('/')
     }
 
     const handlePeopleClick = () => {
@@ -121,6 +127,7 @@ export default function FunctionBar(){
         setIsHome(false)
         setIsPeople(true)
         setIsUser(false)
+        store.history.push('/people')
     }
 
     const handleUserClick = () => {
@@ -128,14 +135,15 @@ export default function FunctionBar(){
         setIsHome(false)
         setIsPeople(false)
         setIsUser(true)
+        store.history.push('/user')
     }
 
     let searchBar = 
-    <TextField id="filled-basic" variant="filled" sx={{ flexGrow: 0.5 }} label="Search Playlists by Name"/>
+    <TextField id="filled-basic" variant="filled" sx={{ flexGrow: 0.5 }} label="Search Playlists by Name" onChange={(e) => setSearch(e.target.value)}/>
 
     if(isUser){
         searchBar =
-        <TextField id="filled-basic" variant="filled" sx={{ flexGrow: 0.5 }} label="Search Playlists by User"/>
+        <TextField id="filled-basic" variant="filled" sx={{ flexGrow: 0.5 }} label="Search Playlists by User" onChange={(e) => setSearch(e.target.value)}/>
     }
     
     return (
