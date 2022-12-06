@@ -25,7 +25,7 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
-    const {idNamePair, selected} = props;
+    const {idNamePair, selected, loadVideos} = props;
     const [editActive, setEditActive] = useState(false);
 
     const [likes, setLikes] = useState(idNamePair.playlist.likes)
@@ -45,11 +45,17 @@ function ListCard(props) {
         active = 'none'
     }
 
+    console.log('[LIST CARD] Playlist', idNamePair.playlist)
+
     const [activeLike, setActiveLike] = useState(active)
 
     console.log('[LIST CARD] Active like? ', activeLike)
  
     const listCard = useRef(null);
+
+    useEffect(() =>{
+        setListens(idNamePair.playlist.listens)
+    }, [idNamePair])
 
     useEffect(() => {
         if (listCard.current) {
@@ -57,7 +63,7 @@ function ListCard(props) {
         }
       },
       [store.currentList])
-
+    
     useEffect(() =>{
         console.log('[LIST CARD] Likes?', likes)
         store.updatePlaylistLikesById(idNamePair._id, likes, dislikes, activeLike)
@@ -408,9 +414,10 @@ function ListCard(props) {
     let cardElement = 
         <Accordion
             expanded = {idNamePair._id === currentListID}
+            onClick = {() => loadVideos(idNamePair.playlist)}
             sx = {{
                 mb : 2,
-                pointerEvents: "none",
+                pointerEvents: "auto",
                 border: 1,
             }}
         >

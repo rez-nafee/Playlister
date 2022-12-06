@@ -249,6 +249,27 @@ function GlobalStoreContextProvider(props) {
         asyncChangeListName(id);
     }
 
+    store.updateListens = function (playlist){
+        async function asyncGetPlaylist(id) {
+            let response = await api.getPlaylistById(id);
+            if (response.data.success) {
+                console.log('[STORE] GOT THE PLAYLIST. UPDATING LISTENS....')
+                let playlist = response.data.playlist;
+                playlist.listens = playlist.listens + 1;
+                async function updateList(playlist) {
+                    response = await api.updatePlaylistById(playlist._id, playlist);
+                    if (response.data.success) {
+                        console.log('[STORE] SUCCESSFUL IN UPDATING PLAYLIST')
+                        history.push('/')
+                        store.loadIdNamePairs()
+                    }
+                }
+                updateList(playlist);
+            }
+        }
+        console.log('[STORE] Updating the listens of the following playlist: ', playlist)
+        asyncGetPlaylist(playlist._id);
+    }
     store.updatePlaylistLikesById = function(id, likes, dislikes, active){
         async function asyncGetPlaylist(id) {
             let response = await api.getPlaylistById(id);
