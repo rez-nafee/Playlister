@@ -634,14 +634,19 @@ function GlobalStoreContextProvider(props) {
             if (response.data.success) {
                 let playlist = response.data.playlist;
                 console.log(playlist)
-                response = await api.updatePlaylistById(playlist._id, playlist);
-                if (response.data.success) {
-                    console.log('updating state...')
-                    storeReducer({
-                        type: GlobalStoreActionType.SET_CURRENT_LIST,
-                        payload: playlist
-                    });
-                }
+                // response = await api.updatePlaylistById(playlist._id, playlist);
+                // if (response.data.success) {
+                //     console.log('updating state...')
+                //     storeReducer({
+                //         type: GlobalStoreActionType.SET_CURRENT_LIST,
+                //         payload: playlist
+                //     });
+                // }
+                console.log('updating state...')
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: playlist
+                });
             }
         }
         // Clear the transaction stack just in case we have any left over transactions

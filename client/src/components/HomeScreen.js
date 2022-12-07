@@ -5,6 +5,7 @@ import MUIDeleteModal from './MUIDeleteModal'
 import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
 import FunctionBarContext from '../context/FunctionBarContext';
+import AuthContext from '../auth'
 
 // IMPORT OUR MUI COMPONENTS
 import AddIcon from '@mui/icons-material/Add';
@@ -25,6 +26,7 @@ import { borderRadius } from '@mui/system'
 
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const {sort, setSort, search, setSearch, isHome, setIsHome, isPeople, setIsPeople, isUser, setIsUser} = useContext(FunctionBarContext)
     const [value, setValue]= useState('player');
     const [urlList, setUrlList] = useState([])

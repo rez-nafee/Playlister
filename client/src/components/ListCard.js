@@ -34,15 +34,17 @@ function ListCard(props) {
     const [text, setText] = useState('');
 
     let active = ''
-    if (idNamePair.playlist.likedBy.indexOf(auth.user.email) !== -1){
-        console.log('[LIST CARD] I LIKED THIS PLAYLIST!')
-        active = 'like'
-    } else if (idNamePair.playlist.dislikedBy.indexOf(auth.user.email) !== -1){
-        console.log('[LIST CARD] I DISLIKED THIS PLAYLIST!')
-        active = 'dislike'
-    } else{
-        console.log('[LIST CARD] NEVER LIKED THIS PLAYLIST!')
-        active = 'none'
+    if (auth.loggedIn){
+        if (idNamePair.playlist.likedBy.indexOf(auth.user.email) !== -1){
+            console.log('[LIST CARD] I LIKED THIS PLAYLIST!')
+            active = 'like'
+        } else if (idNamePair.playlist.dislikedBy.indexOf(auth.user.email) !== -1){
+            console.log('[LIST CARD] I DISLIKED THIS PLAYLIST!')
+            active = 'dislike'
+        } else{
+            console.log('[LIST CARD] NEVER LIKED THIS PLAYLIST!')
+            active = 'none'
+        }
     }
 
     console.log('[LIST CARD] Playlist', idNamePair.playlist)
@@ -341,6 +343,7 @@ function ListCard(props) {
                         pointerEvents: "auto",
                         color : 'blue'
                     }}
+                    disabled = {!auth.loggedIn}
                 >
                         <ThumbUpIcon></ThumbUpIcon>
                         <Typography>{likes}</Typography>
@@ -353,6 +356,7 @@ function ListCard(props) {
                         pointerEvents: "auto",
                         color : 'red'
                     }}
+                    disabled = {!auth.loggedIn}
                 >
                     <ThumbDownIcon>
                     </ThumbDownIcon>
@@ -397,23 +401,38 @@ function ListCard(props) {
             mb = {2}
         >
         </Box>
-
-        controls = 
-        <Stack
-            direction = 'row'
-            alignItems= 'center'
-            justifyContent= 'flex-end'
-        >
-            <Stack
-                direction = 'row'
-                alignItems= 'center'
-                spacing = {2}
-            >
-                <Button disabled = {!disableDuplicate} variant = 'contained' onClick={(e) => handleDuplicate(e)}>Duplicate</Button>
-                <Button disabled = {!disableDelete} variant = 'contained' onClick={(e) => handleDeleteList(e)}>Delete</Button>
-            </Stack>
-        </Stack>
+        if (auth.loggedIn){
+            controls = 
+                <Stack
+                    direction = 'row'
+                    alignItems= 'center'
+                    justifyContent= 'flex-end'
+                >
+                    <Stack
+                        direction = 'row'
+                        alignItems= 'center'
+                        spacing = {2}
+                    >
+                        <Button disabled = {!disableDuplicate && !auth.loggedIn} variant = 'contained' onClick={(e) => handleDuplicate(e)}>Duplicate</Button>
+                        <Button disabled = {!disableDelete && !auth.loggedIn} variant = 'contained' onClick={(e) => handleDeleteList(e)}>Delete</Button>
+                    </Stack>
+                </Stack>
+        }else{
+            controls = 
+                <Stack
+                    direction = 'row'
+                    alignItems= 'center'
+                    justifyContent= 'flex-end'
+                >
+                </Stack>
+        }
     }
+
+    if(!auth.loggedIn){
+        disableDuplicate = false
+        disableDelete = false
+    }
+
     
     console.log('[LISTCARD] Making card for: ', idNamePair)
     let mouse = idNamePair.playlist.published ? 'none' : 'auto'
@@ -492,6 +511,8 @@ function ListCard(props) {
                     overflow: "scroll",
                     pointerEvents: "auto"
                 }}
+                onClick = {(e) => e.stopPropagation()}
+                onDoubleClick = {(e) => e.stopPropagation()}
             >
                 {
                     playlistSongs

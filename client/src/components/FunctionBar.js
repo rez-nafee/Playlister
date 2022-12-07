@@ -159,7 +159,7 @@ export default function FunctionBar(){
     }
     
     return (
-        <>
+        <>  
             <Stack 
                 direction="row"
                 justifyContent="space-between" 
@@ -175,6 +175,7 @@ export default function FunctionBar(){
                             color: homeSelected
                         }}
                         onClick = {() => handleHomeClick()}
+                        disabled = {!auth.loggedIn}
                     >
                         <HomeIcon>
                         </HomeIcon>

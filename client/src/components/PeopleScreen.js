@@ -5,6 +5,7 @@ import MUIDeleteModal from './MUIDeleteModal'
 import MUIEditSongModal from './MUIEditSongModal'
 import MUIRemoveSongModal from './MUIRemoveSongModal'
 import FunctionBarContext from '../context/FunctionBarContext';
+import FunctionBar from './FunctionBar'
 import AuthContext from '../auth'
 
 // IMPORT OUR MUI COMPONENTS
@@ -25,6 +26,7 @@ import YouTubePlayer from 'react-player/youtube'
 
 export default function PeopleScreen(){
     const { store } = useContext(GlobalStoreContext);
+    const { auth } = useContext(AuthContext);
     const {sort, setSort, search, setSearch, isHome, setIsHome, isPeople, setIsPeople, isUser, setIsUser} = useContext(FunctionBarContext)
     const [value, setValue]= useState('player');
     const [urlList, setUrlList] = useState([])
@@ -632,6 +634,7 @@ export default function PeopleScreen(){
     console.log('[PEOPLE SCREEN] PAIRS ARRAY: ', store.idNamePairsPublished)
     return (
         <> 
+            {auth.loggedIn ? <></> : <FunctionBar></FunctionBar>}
             <Grid container 
                 spacing={1}
                 direction="row"
