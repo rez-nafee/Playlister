@@ -127,7 +127,7 @@ export default function AppBanner() {
                     menu
                 }
             </Box>
-            <FunctionBar></FunctionBar>
+            { auth.loggedIn ? <FunctionBar></FunctionBar> : <></>}
         </>
 
     );
