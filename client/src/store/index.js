@@ -339,7 +339,7 @@ function GlobalStoreContextProvider(props) {
                             store.history.push(destination);
                             store.loadIdNamePairs();
                         }
-                        if(destination === '/people'){
+                        if(destination === '/people' || destination === '/user'){
                             console.log('[STORE] SUCCESSFUL IN UPDATING PLAYLIST... RELOAD PUBLISHED PAIRS!')
                             store.history.push(destination);
                             store.loadIdNamePairsPublished();
@@ -374,10 +374,11 @@ function GlobalStoreContextProvider(props) {
                             store.history.push(destination)
                             store.loadIdNamePairs()
                         }
-                        if(destination === '/people'){
+                        if(destination === '/people' || destination === '/user'){
                             store.history.push(destination)
                             store.loadIdNamePairsPublished()
                         }
+
                     }
                 }
                 updateList(playlist);

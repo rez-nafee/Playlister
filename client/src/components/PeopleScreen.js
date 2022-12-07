@@ -46,6 +46,8 @@ export default function PeopleScreen(){
     const [disableForward, updateForward] = useState(false)
 
     useEffect(() => {
+        if(search !== '' || search === null)
+            setSearch('')
         store.loadIdNamePairsPublished();
         setIsHome(false)
         setIsPeople(true)

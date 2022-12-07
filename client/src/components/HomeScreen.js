@@ -47,6 +47,8 @@ const HomeScreen = () => {
     const [canComment, setCanComment] = useState(false);
 
     useEffect(() => {
+        if(search !== '' || search === null)
+            setSearch('')
         store.loadIdNamePairs();
         setIsHome(true)
         setIsPeople(false)

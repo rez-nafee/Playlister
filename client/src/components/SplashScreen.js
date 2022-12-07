@@ -6,8 +6,6 @@ import "@fontsource/pacifico";
 import { useContext, useState } from 'react'
 import { GlobalStoreContext } from '../store'
 
-import Linkie from '@mui/material/Link';
-
 export default function SplashScreen() {
     const { store } = useContext(GlobalStoreContext);
     store.history = useHistory();
@@ -21,7 +19,7 @@ export default function SplashScreen() {
                 </Stack>
                 <Stack direction = "row" spacing={2} justifyContent="center" alignItems="center" sx={{padding: "50px"}}>
                     <Button variant="contained" sx={{backgroundColor : '#808080'}} href = '/login/'>Login</Button>
-                    <Button variant="contained" sx={{backgroundColor : '#808080'}}>Continue as Guest</Button>
+                    <Button variant="contained" sx={{backgroundColor : '#808080'}} href = '/people'>Continue as Guest</Button>
                     <Button variant="contained" sx={{backgroundColor : '#808080'}} href = '/register'>Create an Account</Button>
                 </Stack>
                 <Stack 

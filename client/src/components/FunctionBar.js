@@ -139,11 +139,23 @@ export default function FunctionBar(){
     }
 
     let searchBar = 
-    <TextField id="filled-basic" variant="filled" sx={{ flexGrow: 0.5 }} label="Search Playlists by Name" onChange={(e) => setSearch(e.target.value)}/>
+    <TextField 
+        variant="filled" 
+        value={search}
+        sx={{ flexGrow: 0.5 }} 
+        label="Search Playlists by Name" 
+        onChange={(e) => setSearch(e.target.value)}
+    />
 
     if(isUser){
         searchBar =
-        <TextField id="filled-basic" variant="filled" sx={{ flexGrow: 0.5 }} label="Search Playlists by User" onChange={(e) => setSearch(e.target.value)}/>
+        <TextField 
+            value={search}
+            variant="filled" 
+            sx={{ flexGrow: 0.5 }} 
+            label="Search Playlists by User" 
+            onChange={(e) => setSearch(e.target.value)}
+        />
     }
     
     return (
