@@ -514,6 +514,7 @@ export default function UserScreen(){
                         setComment('')
                     }
                 }}
+                disabled = {!auth.loggedIn}
             />
         </Grid>
     }

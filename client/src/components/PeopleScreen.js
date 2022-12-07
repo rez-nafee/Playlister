@@ -594,6 +594,7 @@ export default function PeopleScreen(){
                         setComment('')
                     }
                 }}
+                disabled = {!auth.loggedIn}
             />
         </Grid>
     }
