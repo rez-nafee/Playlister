@@ -1,13 +1,6 @@
 const Playlist = require('../models/playlist-model')
 const User = require('../models/user-model');
-/*
-    This is our back-end API. It provides all the data services
-    our database needs. Note that this file contains the controller
-    functions for each endpoint.
-    
-    @author McKilla Gorilla
-    @author Rezvan Nafee
-*/
+
 createPlaylist = (req, res) => {
     const body = req.body;
     console.log("createPlaylist body: " + JSON.stringify(body));

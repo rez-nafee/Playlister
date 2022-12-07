@@ -17,13 +17,6 @@ import FunctionBar from "./FunctionBar"
 import PeopleScreen from './PeopleScreen'
 import UserScreen from './UserScreen'
 
-/*
-    This serves as a module so that we can import
-    all the other components as we wish.
-    
-    @author McKilla Gorilla
-    @author Rezvan Nafee
-*/
 export { 
     AppBanner,  
     EditToolbar, 
