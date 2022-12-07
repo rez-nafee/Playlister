@@ -156,6 +156,37 @@ getPlaylistPairs = async (req, res) => {
     }).catch(err => console.log(err))
 }
 
+getPlaylistPairsPublished = async (req, res) => {
+    console.log("getPlaylistPairsPublished");
+    await Playlist.find({ published: true }, (err, playlists) => {
+        console.log("found Playlists: " + JSON.stringify(playlists));
+        if (err) {
+            return res.status(400).json({ success: false, error: err })
+        }
+        if (!playlists) {
+            console.log(playlists.length);
+            return res
+                .status(404)
+                .json({ success: false, error: 'Playlists not found' })
+        }
+        else {
+            console.log("Send the Playlist pairs");
+            // PUT ALL THE LISTS INTO ID, NAME PAIRS
+            let pairs = [];
+            for (let key in playlists) {
+                let list = playlists[key];
+                let pair = {
+                    _id: list._id,
+                    name: list.name,
+                    playlist: playlists[key]
+                };
+                pairs.push(pair);
+            }
+            return res.status(200).json({ success: true, idNamePairs: pairs })
+        }
+    }).catch(err => console.log(err))
+}
+
 getPlaylists = async (req, res) => {
     await Playlist.find({}, (err, playlists) => {
         if (err) {
@@ -190,13 +221,12 @@ updatePlaylist = async (req, res) => {
                 message: 'Playlist not found!',
             })
         }
-
         // DOES THIS LIST BELONG TO THIS USER?
         async function asyncFindUser(list) {
             await User.findOne({ email: list.ownerEmail }, (err, user) => {
                 console.log("user._id: " + user._id);
                 console.log("req.userId: " + req.userId);
-                if (user._id == req.userId) {
+               
                     console.log("correct user!");
                     console.log("req.body.name: " + req.body.name);
                     
@@ -230,11 +260,6 @@ updatePlaylist = async (req, res) => {
                                 message: 'Playlist not updated!',
                             })
                         })
-                }
-                else {
-                    console.log("incorrect user!");
-                    return res.status(400).json({ success: false, description: "authentication error" });
-                }
             });
         }
         asyncFindUser(playlist);
@@ -247,5 +272,6 @@ module.exports = {
     getPlaylistById,
     getPlaylistPairs,
     getPlaylists,
-    updatePlaylist
+    updatePlaylist,
+    getPlaylistPairsPublished
 }

@@ -27,7 +27,7 @@ function ListCard(props) {
     const { auth } = useContext(AuthContext);
     const {idNamePair, selected, loadVideos} = props;
     const [editActive, setEditActive] = useState(false);
-
+    
     const [likes, setLikes] = useState(idNamePair.playlist.likes)
     const [dislikes, setDislikes] = useState(idNamePair.playlist.dislikes)
     const [listens, setListens] = useState(idNamePair.playlist.listens)
@@ -75,13 +75,15 @@ function ListCard(props) {
     }, [dislikes])
     
 
-    function handleLoadList() {
+    function handleLoadList(e) {
+        e.stopPropagation()
         console.log('ID of List: ', idNamePair._id)
         // CHANGE THE CURRENT LIST
         store.setCurrentList(idNamePair._id);
     }
 
-    function handleClose() {
+    function handleClose(e) {
+        e.stopPropagation()
         store.closeCurrentList();
     }
 
@@ -128,7 +130,8 @@ function ListCard(props) {
     }
 
 
-    function handleDuplicate(){
+    function handleDuplicate(e){
+        e.stopPropagation()
         store.duplicatePlaylist()
     }
 
@@ -136,13 +139,16 @@ function ListCard(props) {
         console.log("adding a new song...")
         store.addNewSong();
     }
-    function handleUndo() {
+    function handleUndo(e) {
+        e.stopPropagation()
         store.undo();
     }
-    function handleRedo() {
+    function handleRedo(e) {
+        e.stopPropagation()
         store.redo();
     }
-    function handleClose() {
+    function handleClose(e) {
+        e.stopPropagation()
         store.closeCurrentList();
     }
 
@@ -278,7 +284,7 @@ function ListCard(props) {
                     fontSize: 16,
                 }}
                 variant = 'contained'
-                onClick={() => handleAddNewSong()}
+                onClick={(e) => handleAddNewSong(e)}
             >
                 +
             </Button>
@@ -296,8 +302,8 @@ function ListCard(props) {
                 alignItems= 'center'
                 spacing = {1}
             >
-                <Button disabled = {!disableUndo} variant = 'contained' onClick={() => handleUndo()}> Undo</Button>
-                <Button disabled = {!disableRedo} variant = 'contained' onClick={() => handleRedo()} > Redo </Button>
+                <Button disabled = {!disableUndo} variant = 'contained' onClick={(e) => handleUndo(e)}> Undo</Button>
+                <Button disabled = {!disableRedo} variant = 'contained' onClick={(e) => handleRedo(e)} > Redo </Button>
             </Stack>
 
             <Stack
@@ -305,9 +311,9 @@ function ListCard(props) {
                 alignItems= 'center'
                 spacing = {1}
             >
-                <Button disabled = {!disalbePublish} variant = 'contained' onClick={() => handlePublishList()}>Publish</Button>
-                <Button disabled = {!disableDelete} variant = 'contained' onClick={() => handleDeleteList()}>Delete</Button>
-                <Button disabled = {!disableDuplicate} variant = 'contained' onClick={() => handleDuplicate()}>Duplicate</Button>
+                <Button disabled = {!disalbePublish} variant = 'contained' onClick={(e) => handlePublishList(e)}>Publish</Button>
+                <Button disabled = {!disableDelete} variant = 'contained' onClick={(e) => handleDeleteList(e)}>Delete</Button>
+                <Button disabled = {!disableDuplicate} variant = 'contained' onClick={(e) => handleDuplicate(e)}>Duplicate</Button>
             </Stack>
         </Stack>
     }
@@ -403,8 +409,8 @@ function ListCard(props) {
                 alignItems= 'center'
                 spacing = {2}
             >
-                <Button disabled = {!disableDuplicate} variant = 'contained' onClick={() => handleDuplicate()}>Duplicate</Button>
-                <Button disabled = {!disableDelete} variant = 'contained' onClick={() => handleDeleteList()}>Delete</Button>
+                <Button disabled = {!disableDuplicate} variant = 'contained' onClick={(e) => handleDuplicate(e)}>Duplicate</Button>
+                <Button disabled = {!disableDelete} variant = 'contained' onClick={(e) => handleDeleteList(e)}>Delete</Button>
             </Stack>
         </Stack>
     }
@@ -413,8 +419,8 @@ function ListCard(props) {
     let mouse = idNamePair.playlist.published ? 'none' : 'auto'
     let cardElement = 
         <Accordion
-            expanded = {idNamePair._id === currentListID}
             onClick = {() => loadVideos(idNamePair.playlist)}
+            expanded = {idNamePair._id === currentListID}
             sx = {{
                 mb : 2,
                 pointerEvents: "auto",
@@ -440,7 +446,7 @@ function ListCard(props) {
                         sx={{
                             pointerEvents: "auto",
                         }}
-                        onClick = {() => idNamePair._id === currentListID ? handleClose() : handleLoadList()}
+                        onClick = {(e) => idNamePair._id === currentListID ? handleClose(e) : handleLoadList(e)}
                     />
                 }
             >

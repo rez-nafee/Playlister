@@ -21,6 +21,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import YouTubePlayer from 'react-player/youtube'
+import { borderRadius } from '@mui/system'
 
 const HomeScreen = () => {
     const { store } = useContext(GlobalStoreContext);
@@ -33,6 +34,7 @@ const HomeScreen = () => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [playlistPosition, setPlaylistPosition] = useState(null)
     const [key, setKey] = useState(null)
+    const [comment, setComment] = useState('')
 
 
     // STATE VARIABLES FOR FOOL PROOFING THE VIDEO CONTROLS!
@@ -41,8 +43,14 @@ const HomeScreen = () => {
     const [disableBackward, updateBackward] = useState(false)
     const [disableForward, updateForward] = useState(false)
 
+    //CAN THE USER COMMENT ON THE PLAYLIST THAT IS SELECTED?
+    const [canComment, setCanComment] = useState(false);
+
     useEffect(() => {
         store.loadIdNamePairs();
+        setIsHome(true)
+        setIsPeople(false)
+        setIsUser(false)
     }, []);
 
     let modalJSX = "";
@@ -60,7 +68,12 @@ const HomeScreen = () => {
             setUrl(urlList[0])
             console.log('[HOME SCREEN] Playlist is loaded: ', playlist)
             console.log('[HOME SCREEN] Updating playlist listen count...')
-            store.updateListens(playlist)
+            if(playlist.published)
+                setCanComment(true)
+            else{
+                setCanComment(false)
+            }
+            store.updateListens(playlist, '/')
         }
         else{
             setUrl('')
@@ -78,16 +91,28 @@ const HomeScreen = () => {
         return true;
       }
 
-    function loadVideos(playlist){
-        console.log('[HOME SCREEN] Playlist clicked? ', playlist)
-        var vidList = playlist.songs.map((a) => "https://www.youtube.com/watch?v=" + a.youTubeId)
+    function loadVideos(list){
+        console.log('[HOME SCREEN] Playlist clicked? ', list)
+        setValue('player')
+        var vidList = list.songs.map((a) => "https://www.youtube.com/watch?v=" + a.youTubeId)
         console.log('[HOME SCREEN] URL List:  ', vidList)
         console.log('[HOME SCREEN] URL List:  ', urlList)
-        console.log('[HOME SCREEN] URL list the same?', )
+        console.log('[HOME SCREEN] URL list the same?', !arraysEqual(vidList, urlList))
         if(!arraysEqual(vidList, urlList)){
             console.log('[HOME SCREEN] DIFFERENT URL LIST LOADED...')
             setUrlList(vidList)
-            setPlaylist(playlist)
+            setIsPlaying(false)
+            setPlaylist(list)
+            if(playlist.published)
+                setCanComment(true)
+        }
+        if(vidList.length === 0){
+            console.log('[HOME SCREEN] NO SONGS LOADED...')
+            setUrlList([])
+            setPlaylist(null)
+            setPlaylistPosition(null)
+            setSong(null)
+            setCanComment(false)
         }
     }
 
@@ -317,12 +342,6 @@ const HomeScreen = () => {
 
     console.log(disableBtns)
 
-    let tabContent = ''
-    console.log('[HOME SCREEN] BACKWARD?: ', disableBackward)
-    console.log('[HOME SCREEN] PLAY?: ', disablePlay)
-    console.log('[HOME SCREEN] PAUSE?: ', disablePause)
-    console.log('[HOME SCREEN] FORWARD?: ', disableForward)
-
     function onReady (){
         // The video is ready. Enable the play button! 
         updatePlay(true)
@@ -402,6 +421,11 @@ const HomeScreen = () => {
         goForward()
     }
 
+    let tabContent = ''
+    console.log('[HOME SCREEN] BACKWARD?: ', disableBackward)
+    console.log('[HOME SCREEN] PLAY?: ', disablePlay)
+    console.log('[HOME SCREEN] PAUSE?: ', disablePause)
+    console.log('[HOME SCREEN] FORWARD?: ', disableForward)
    
     if (value === 'player'){
         tabContent =
@@ -496,7 +520,15 @@ const HomeScreen = () => {
             </Box>  
         </Grid>
     }
-    if (value === 'comments'){
+
+    let commentList = [];
+    console.log('[HOME SCREEN] IDNAMEPAIRS ARE: ', store.idNamePairs)
+    if (store.idNamePairs !== null && playlist !== null){
+        commentList = store.idNamePairs.filter((a) => a._id === playlist._id)[0].playlist.comments
+        console.log('[HOME SCREEN] Comments are: ', commentList)
+    }
+
+    if (value === 'comments' && canComment){
         tabContent = 
         <Grid item>
             <Box
@@ -507,12 +539,56 @@ const HomeScreen = () => {
                 }}
                 overflow = 'scroll'
             >
+                {
+                    commentList.map((a) => 
+                        <Box
+                            p={2}
+                            m= {2}
+                            sx={{
+                                width: '45vw',
+                                backgroundColor: '#888888',
+                                borderRadius: '10%',
+                                border: 2 
+                            }}
+                        >
+                            <Typography
+                                sx = {{
+                                    color: 'blue',
+                                    textDecoration: 'underline'
+                                }}
+                                mb={1}
+                            >
+                                {a.author}
+                            </Typography>
+                            <Typography
+                                sx = {{
+                                    color:'white'
+                                }}
+                                mt={1}
+                            >
+                                {a.comment}
+                            </Typography>
+                        </Box>
+                    )
+                }
             </Box> 
             <TextField 
                 label="Write a comment..." 
                 variant="filled" 
                 sx={{
                     width: '50vw',
+                }}
+                value = {comment}
+                onChange = {(e) => setComment(e.target.value)}
+                onKeyDown = {(e)=> {
+                    if(e.key === 'Enter'){
+                        console.log('[HOME SCREEN] Enter key was pressed')
+                        // Update the comment section for this playlist
+                        console.log('[HOME SCREEN] IS THE COMMENT EMPTY?', comment === '')
+                        store.updateComments(comment, playlist, '/')
+                        // Get rid of the comment that was posted and reset the 
+                        setComment('')
+                    }
                 }}
             />
         </Grid>
@@ -589,7 +665,7 @@ const HomeScreen = () => {
                                 onChange={(e, val) => setValue(val)}
                             >
                                 <Tab value = 'player' label = 'Player'/>
-                                <Tab value = 'comments' label = 'Comments' disabled = {!store.currentList}/>
+                                <Tab value = 'comments' label = 'Comments' disabled = {!canComment}/>
                             </Tabs>
                         </Grid>
                         {
