@@ -413,10 +413,27 @@ function ListCard(props) {
                         alignItems= 'center'
                         spacing = {2}
                     >
-                        <Button disabled = {!disableDuplicate && !auth.loggedIn} variant = 'contained' onClick={(e) => handleDuplicate(e)}>Duplicate</Button>
-                        <Button disabled = {!disableDelete && !auth.loggedIn} variant = 'contained' onClick={(e) => handleDeleteList(e)}>Delete</Button>
+                        <Button disabled = {!disableDuplicate} variant = 'contained' onClick={(e) => handleDuplicate(e)}>Duplicate</Button>
+                        <Button disabled = {!disableDelete} variant = 'contained' onClick={(e) => handleDeleteList(e)}>Delete</Button>
                     </Stack>
                 </Stack>
+            if (auth.user.email !== idNamePair.playlist.ownerEmail){
+                controls = 
+                <Stack
+                    direction = 'row'
+                    alignItems= 'center'
+                    justifyContent= 'flex-end'
+                >
+                    <Stack
+                        direction = 'row'
+                        alignItems= 'center'
+                        spacing = {2}
+                    >
+                        <Button disabled = {!disableDuplicate} variant = 'contained' onClick={(e) => handleDuplicate(e)}>Duplicate</Button>
+                        <Button disabled = {true} variant = 'contained' onClick={(e) => handleDeleteList(e)}>Delete</Button>
+                    </Stack>
+                </Stack>
+            }
         }else{
             controls = 
                 <Stack
