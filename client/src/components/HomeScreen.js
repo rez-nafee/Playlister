@@ -185,6 +185,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -197,6 +198,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -210,6 +212,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -223,6 +226,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -236,6 +240,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -249,6 +254,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -266,6 +272,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -279,6 +286,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -292,6 +300,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -305,6 +314,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -318,6 +328,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -331,6 +342,7 @@ const HomeScreen = () => {
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPlaying = {song}
                         loadVideos = {loadVideos}
                     />
                 ))

@@ -25,7 +25,7 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 function ListCard(props) {
     const { store } = useContext(GlobalStoreContext);
     const { auth } = useContext(AuthContext);
-    const {idNamePair, selected, loadVideos} = props;
+    const {idNamePair, selected, loadVideos, songPosition} = props;
     const [editActive, setEditActive] = useState(false);
     
     const [likes, setLikes] = useState(idNamePair.playlist.likes)
@@ -385,7 +385,7 @@ function ListCard(props) {
                     <Typography
                         id={'playlist-song-' + (index)}
                         fontSize='18pt'
-                        color = ''
+                        color = {index === songPosition ? 'skyblue': ''}
                     >
                         {index + 1}. {song.title} by {song.artist}
                     </Typography>

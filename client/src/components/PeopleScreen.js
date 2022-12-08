@@ -173,6 +173,7 @@ export default function PeopleScreen(){
         store.createNewList();
         store.history.push('/')
     }
+
     let listCard = "";
     if (store && store.idNamePairsPublished.length > 0) {
         switch(sort){
@@ -185,6 +186,7 @@ export default function PeopleScreen(){
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -197,6 +199,7 @@ export default function PeopleScreen(){
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -210,6 +213,7 @@ export default function PeopleScreen(){
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -223,6 +227,7 @@ export default function PeopleScreen(){
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -236,6 +241,7 @@ export default function PeopleScreen(){
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -249,6 +255,7 @@ export default function PeopleScreen(){
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -266,6 +273,7 @@ export default function PeopleScreen(){
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -279,6 +287,7 @@ export default function PeopleScreen(){
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -292,6 +301,7 @@ export default function PeopleScreen(){
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -305,6 +315,7 @@ export default function PeopleScreen(){
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -318,6 +329,7 @@ export default function PeopleScreen(){
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))
@@ -331,6 +343,7 @@ export default function PeopleScreen(){
                         key={pair._id}
                         idNamePair={pair}
                         selected={false}
+                        songPosition = {playlistPosition}
                         loadVideos = {loadVideos}
                     />
                 ))

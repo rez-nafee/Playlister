@@ -187,6 +187,7 @@ export default function UserScreen(){
                         idNamePair={pair}
                         selected={false}
                         loadVideos = {loadVideos}
+                        songPosition = {playlistPosition}
                     />
                 ))
                 break;
@@ -200,6 +201,7 @@ export default function UserScreen(){
                         idNamePair={pair}
                         selected={false}
                         loadVideos = {loadVideos}
+                        songPosition = {playlistPosition}
                     />
                 ))
                 break;
@@ -213,6 +215,7 @@ export default function UserScreen(){
                         idNamePair={pair}
                         selected={false}
                         loadVideos = {loadVideos}
+                        songPosition = {playlistPosition}
                     />
                 ))
                 break;
@@ -226,6 +229,7 @@ export default function UserScreen(){
                         idNamePair={pair}
                         selected={false}
                         loadVideos = {loadVideos}
+                        songPosition = {playlistPosition}
                     />
                 ))
                 break;
@@ -239,6 +243,7 @@ export default function UserScreen(){
                         idNamePair={pair}
                         selected={false}
                         loadVideos = {loadVideos}
+                        songPosition = {playlistPosition}
                     />
                 ))
                 break;
@@ -252,6 +257,7 @@ export default function UserScreen(){
                         idNamePair={pair}
                         selected={false}
                         loadVideos = {loadVideos}
+                        songPosition = {playlistPosition}
                     />
                 ))
         }
