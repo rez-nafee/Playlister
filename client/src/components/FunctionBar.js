@@ -119,6 +119,7 @@ export default function FunctionBar(){
         setIsHome(true)
         setIsPeople(false)
         setIsUser(false)
+        store.closeCurrentList();
         store.history.push('/')
     }
 
@@ -127,6 +128,7 @@ export default function FunctionBar(){
         setIsHome(false)
         setIsPeople(true)
         setIsUser(false)
+        store.closeCurrentList();
         store.history.push('/people')
     }
 
@@ -135,6 +137,7 @@ export default function FunctionBar(){
         setIsHome(false)
         setIsPeople(false)
         setIsUser(true)
+        store.closeCurrentList();
         store.history.push('/user')
     }
 
